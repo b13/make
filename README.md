@@ -19,7 +19,7 @@ for production realeases.
 ## Usage
 
 All components, including new extensions, can be created with
-a dedicated command, excetued on CLI with the ```typo3``` binary:
+a dedicated command, executed on CLI with the ```typo3``` binary:
 `bin/typo3 make:<component_name>`.
 
 Example for creating a new extension:

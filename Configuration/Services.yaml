@@ -1,0 +1,46 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  B13\Make\:
+    resource: '../Classes/*'
+
+  B13\Make\PackageResolver:
+    public: true
+
+  B13\Make\Command\Component\BackendControllerCommand:
+    tags:
+      - name: 'console.command'
+        command: 'make:backendcontroller'
+        description: 'Create a new backend controller'
+        schedulable: false
+
+  B13\Make\Command\Component\CommandCommand:
+    tags:
+      - name: 'console.command'
+        command: 'make:command'
+        description: 'Create a new command'
+        schedulable: false
+
+  B13\Make\Command\Component\EventListenerCommand:
+    tags:
+      - name: 'console.command'
+        command: 'make:eventlistener'
+        description: 'Create a new event listener'
+        schedulable: false
+
+  B13\Make\Command\ExtensionCommand:
+    tags:
+      - name: 'console.command'
+        command: 'make:extension'
+        description: 'Create a new extension'
+        schedulable: false
+
+  B13\Make\Command\Component\MiddlewareCommand:
+    tags:
+      - name: 'console.command'
+        command: 'make:middleware'
+        description: 'Create a new middleware'
+        schedulable: false

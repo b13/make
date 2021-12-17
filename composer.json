@@ -1,0 +1,34 @@
+{
+	"name": "b13/make",
+	"description": "Kickstart functionality for TYPO3",
+	"type": "typo3-cms-extension",
+	"homepage": "https://b13.com",
+	"license": "GPL-2.0-or-later",
+	"keywords": [
+		"TYPO3",
+		"Kickstarter",
+		"Extensions"
+	],
+	"authors": [
+		{
+			"name": "Oliver Bartsch",
+			"email": "oliver.bartsch@b13.com"
+		}
+	],
+	"require": {
+		"typo3/cms-core": "^10.0 || ^11.0 || ^12.0"
+	},
+	"require-dev": {
+		"roave/security-advisories": "dev-master"
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "make"
+		}
+	},
+	"autoload": {
+		"psr-4": {
+			"B13\\Make\\": "Classes/"
+		}
+	}
+}

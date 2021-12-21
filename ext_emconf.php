@@ -12,7 +12,7 @@ $EM_CONF[$_EXTKEY] = [
     'version' => '0.1.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '10.4.0-12.99.99',
+            'typo3' => '10.4.0-11.5.99', // This differs to composer.json since TER does not yet allow v12 dependencies
         ],
         'conflicts' => [],
         'suggests' => [],

@@ -66,10 +66,7 @@ class BackendControllerCommand extends SimpleComponentCommand
                 )
             )
             ->setMethodName(
-                (string)$this->io->ask(
-                    'Enter the method, which should handle the request?',
-                    $this->getProposalFromEnvironment('BACKEND_CONTROLLER_METHOD_NAME', 'handleRequest')
-                )
+                (string)$this->io->ask('Enter the method, which should handle the request - LEAVE EMPTY FOR USING __invoke()')
             );
     }
 

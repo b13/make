@@ -69,7 +69,7 @@ class BackendController extends AbstractComponent implements ArrayConfigurationC
     {
         return  [
             'path' => $this->routePath,
-            'target' => $this->getClassName() . '::' . $this->methodName,
+            'target' => $this->getClassName() . ($this->methodName !== '' ? '::' . $this->methodName : ''),
         ];
     }
 
@@ -80,7 +80,7 @@ class BackendController extends AbstractComponent implements ArrayConfigurationC
             [
                 'NAMESPACE' => $this->getNamespace(),
                 'NAME' => $this->name,
-                'METHOD' => $this->methodName
+                'METHOD' => $this->methodName ?: '__invoke',
             ]
         );
     }

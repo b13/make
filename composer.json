@@ -4,11 +4,7 @@
 	"type": "typo3-cms-extension",
 	"homepage": "https://b13.com",
 	"license": "GPL-2.0-or-later",
-	"keywords": [
-		"TYPO3",
-		"Kickstarter",
-		"Extensions"
-	],
+	"keywords": ["TYPO3", "Kickstarter", "Extensions"],
 	"authors": [
 		{
 			"name": "Oliver Bartsch",

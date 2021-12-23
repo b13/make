@@ -28,7 +28,7 @@ class ServiceConfigurationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        GeneralUtility::mkdir_deep(Environment::getVarPath() . self::CONFIGURATION_PATH);
+        GeneralUtility::mkdir_deep(Environment::getVarPath() . self::CONFIGURATION_PATH . 'Configuration/');
         file_put_contents(
             Environment::getVarPath() . self::CONFIGURATION_PATH . 'Configuration/Services.yaml',
             Yaml::dump(self::TEST_CONFIGURATION, 99, 2)
@@ -37,7 +37,7 @@ class ServiceConfigurationTest extends TestCase
 
     protected function tearDown(): void
     {
-        unlink(Environment::getVarPath() . self::CONFIGURATION_PATH . 'Configuration/Services.yaml');
+        GeneralUtility::rmdir(Environment::getVarPath() . self::CONFIGURATION_PATH, true);
         parent::tearDown();
     }
 

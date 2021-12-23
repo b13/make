@@ -1,10 +1,10 @@
 {
 	"name": "b13/make",
-	"description": "Kickstart functionality for TYPO3",
+	"description": "Kickstarter tool for various TYPO3 functionalities",
 	"type": "typo3-cms-extension",
 	"homepage": "https://b13.com",
 	"license": "GPL-2.0-or-later",
-	"keywords": ["TYPO3", "Kickstarter", "Extensions"],
+	"keywords": ["TYPO3", "Kickstarter", "Extensions", "CLI"],
 	"authors": [
 		{
 			"name": "Oliver Bartsch",

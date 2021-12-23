@@ -2,7 +2,7 @@
 
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Make',
-    'description' => 'Kickstarter tool for various TYPO3 functionalities',
+    'description' => 'Kickstarter CLI tool for various TYPO3 functionalities',
     'category' => 'misc',
     'author' => 'b13 GmbH',
     'author_email' => 'typo3@b13.com',

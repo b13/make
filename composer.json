@@ -1,6 +1,6 @@
 {
 	"name": "b13/make",
-	"description": "Kickstarter tool for various TYPO3 functionalities",
+	"description": "Kickstarter CLI tool for various TYPO3 functionalities",
 	"type": "typo3-cms-extension",
 	"homepage": "https://b13.com",
 	"license": "GPL-2.0-or-later",

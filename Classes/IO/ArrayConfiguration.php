@@ -28,8 +28,8 @@ class ArrayConfiguration extends AbstractConfiguration
 
     public function __construct(string $packagePath, string $file, string $directory)
     {
-        $this->file = $file;
-        $this->directory = $directory;
+        $this->file = trim($file, '/');
+        $this->directory = trim($directory, '/') . '/';
         parent::__construct($packagePath);
     }
 

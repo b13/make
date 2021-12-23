@@ -20,7 +20,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ServiceConfigurationTest extends TestCase
 {
-    private const CONFIGURATION_PATH = '/transient/ServiceConfigurationTest/';
+    private const TEST_DIRECTORY = '/tests';
+    private const PACKAGE_PATH = self::TEST_DIRECTORY . '/ServiceConfigurationTest';
     private const TEST_CONFIGURATION = [
         'services' => ['_defaults' => ['public' => true], 'Vendor\\Extension\\' => ['resource' => '../Classes/*']]
     ];
@@ -28,16 +29,16 @@ class ServiceConfigurationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        GeneralUtility::mkdir_deep(Environment::getVarPath() . self::CONFIGURATION_PATH . 'Configuration/');
+        GeneralUtility::mkdir_deep(Environment::getVarPath() . self::PACKAGE_PATH . '/Configuration/');
         file_put_contents(
-            Environment::getVarPath() . self::CONFIGURATION_PATH . 'Configuration/Services.yaml',
+            Environment::getVarPath() . self::PACKAGE_PATH . '/Configuration/Services.yaml',
             Yaml::dump(self::TEST_CONFIGURATION, 99, 2)
         );
     }
 
     protected function tearDown(): void
     {
-        GeneralUtility::rmdir(Environment::getVarPath() . self::CONFIGURATION_PATH, true);
+        GeneralUtility::rmdir(Environment::getVarPath() . self::TEST_DIRECTORY, true);
         parent::tearDown();
     }
 
@@ -49,7 +50,7 @@ class ServiceConfigurationTest extends TestCase
         $serviceConfiguration = new ServiceConfiguration('/Fixtures/InvalidPath/');
         self::assertEmpty($serviceConfiguration->getConfiguration());
 
-        $serviceConfiguration = new ServiceConfiguration(Environment::getVarPath() . self::CONFIGURATION_PATH);
+        $serviceConfiguration = new ServiceConfiguration(Environment::getVarPath() . self::PACKAGE_PATH);
         self::assertEquals(
             self::TEST_CONFIGURATION,
             $serviceConfiguration->getConfiguration()
@@ -101,7 +102,7 @@ class ServiceConfigurationTest extends TestCase
      */
     public function serviceConfigurationIsWrittenTest(): void
     {
-        $serviceConfiguration = new ServiceConfiguration(Environment::getVarPath() . self::CONFIGURATION_PATH);
+        $serviceConfiguration = new ServiceConfiguration(Environment::getVarPath() . self::PACKAGE_PATH);
         // Get current configuration
         $configuration = $serviceConfiguration->getConfiguration();
         self::assertEquals(self::TEST_CONFIGURATION, $configuration);
@@ -112,7 +113,7 @@ class ServiceConfigurationTest extends TestCase
         $serviceConfiguration->setConfiguration($configuration);
         $serviceConfiguration->write();
 
-        $writtenServiceConfiguration = new ServiceConfiguration(Environment::getVarPath() . self::CONFIGURATION_PATH);
+        $writtenServiceConfiguration = new ServiceConfiguration(Environment::getVarPath() . self::PACKAGE_PATH);
         self::assertEquals($configuration, $writtenServiceConfiguration->getConfiguration());
     }
 
@@ -121,7 +122,7 @@ class ServiceConfigurationTest extends TestCase
      */
     public function serviceConfigurationSortsImportsOnTopTest(): void
     {
-        $serviceConfiguration = new ServiceConfiguration(Environment::getVarPath() . self::CONFIGURATION_PATH);
+        $serviceConfiguration = new ServiceConfiguration(Environment::getVarPath() . self::PACKAGE_PATH);
         // Get current configuration
         $configuration = $serviceConfiguration->getConfiguration();
         self::assertEquals(self::TEST_CONFIGURATION, $configuration);
@@ -135,7 +136,7 @@ class ServiceConfigurationTest extends TestCase
         self::assertEquals('services', array_key_first($serviceConfiguration->getConfiguration()));
         $serviceConfiguration->write();
 
-        $writtenServiceConfiguration = new ServiceConfiguration(Environment::getVarPath() . self::CONFIGURATION_PATH);
+        $writtenServiceConfiguration = new ServiceConfiguration(Environment::getVarPath() . self::PACKAGE_PATH);
         // Now, imports should be the first array key
         self::assertEquals('imports', array_key_first($writtenServiceConfiguration->getConfiguration()));
         self::assertEquals(

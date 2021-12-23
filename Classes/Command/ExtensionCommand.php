@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace B13\Make\Command;
 
 use B13\Make\Component\Extension;
+use B13\Make\IO\ServiceConfiguration;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
@@ -94,7 +95,7 @@ class ExtensionCommand extends AbstractCommand
             try {
                 GeneralUtility::mkdir_deep($absoluteExtensionPath);
             } catch (\Exception $e) {
-                $io->error('Creating of directory ' . $absoluteExtensionPath . ' failed.');
+                $io->error('Creating of directory ' . $absoluteExtensionPath . ' failed');
                 return 1;
             }
         }
@@ -102,28 +103,40 @@ class ExtensionCommand extends AbstractCommand
         // Create composer.json
         $composerFile = rtrim($absoluteExtensionPath, '/') . '/composer.json';
         if (file_exists($composerFile)
-            && !$io->confirm('The file ' . $composerFile . ' already exists. Do you want to override it?', true)
+            && !$io->confirm('A composer.json does already exist. Do you want to override it?', true)
         ) {
-            $io->info('Aborting component generation.');
-            return 0;
-        }
-
-        if (!GeneralUtility::writeFile($composerFile, json_encode($extension, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), true)) {
-            $io->error('Creating ' . $composerFile . ' failed.');
+            $io->info('Creating composer.json skipped');
+        } elseif (!GeneralUtility::writeFile($composerFile, json_encode($extension, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), true)) {
+            $io->error('Creating composer.json failed');
             return 1;
         }
 
+        // Add basic service configuration if requested
+        if ($io->confirm('May we add a basic service configuration for you?', true)) {
+            $serviceConfiguration = new ServiceConfiguration($absoluteExtensionPath);
+            if ($serviceConfiguration->getConfiguration() !== []
+                && !$io->confirm('A service configuration does already exist. Do you want to override it?', true)
+            ) {
+                $io->info('Creating service configuration skipped');
+            } else {
+                $serviceConfiguration->createBasicServiceConfiguration($extension->getPsr4Prefix());
+                if (!$serviceConfiguration->write()) {
+                    $io->warning('Creating service configuration failed');
+                    return 1;
+                }
+            }
+        }
+
+        // Add ext_emconf.php if TYPO3 v10 or requested (default=NO)
         if (isset($supportedTypo3Versions[10])
             || $io->confirm('May we create a ext_emconf.php for you?', false)
         ) {
             $extEmConfFile = rtrim($absoluteExtensionPath, '/') . '/ext_emconf.php';
             if (file_exists($extEmConfFile)
-                && !$io->confirm('The file ' . $extEmConfFile . ' already exists. Do you want to override it?', true)
+                && !$io->confirm('A ext_emconf.php does already exist. Do you want to override it?', true)
             ) {
-                $io->info('Aborting component generation.');
-                return 0;
-            }
-            if (!GeneralUtility::writeFile($extEmConfFile, (string)$extension)) {
+                $io->info('Creating ext_emconf.php skipped');
+            } elseif (!GeneralUtility::writeFile($extEmConfFile, (string)$extension)) {
                 $io->error('Creating ' . $extEmConfFile . ' failed.');
                 return 1;
             }

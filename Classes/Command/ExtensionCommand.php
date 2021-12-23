@@ -107,7 +107,7 @@ class ExtensionCommand extends AbstractCommand
         ) {
             $io->info('Creating composer.json skipped');
         } elseif (!GeneralUtility::writeFile($composerFile, json_encode($extension, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), true)) {
-            $io->error('Creating ' . $composerFile . ' failed');
+            $io->error('Creating composer.json failed');
             return 1;
         }
 
@@ -127,6 +127,7 @@ class ExtensionCommand extends AbstractCommand
             }
         }
 
+        // Add ext_emconf.php if TYPO3 v10 or requested (default=NO)
         if (isset($supportedTypo3Versions[10])
             || $io->confirm('May we create a ext_emconf.php for you?', false)
         ) {

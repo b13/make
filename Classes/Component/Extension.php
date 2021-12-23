@@ -69,6 +69,11 @@ class Extension implements \JsonSerializable
         return $this;
     }
 
+    public function getPsr4Prefix(): string
+    {
+        return $this->psr4Prefix;
+    }
+
     public function setPsr4Prefix(string $psr4Prefix): self
     {
         $this->psr4Prefix = str_replace('/', '\\', $psr4Prefix) . '\\';

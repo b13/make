@@ -25,7 +25,7 @@ abstract class AbstractConfiguration implements ConfigurationInterface
 
     public function __construct(string $packagePath)
     {
-        $this->packagePath = $packagePath;
+        $this->packagePath = rtrim($packagePath, '/') . '/';
         $this->configuration = $this->load();
     }
 

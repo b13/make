@@ -49,7 +49,7 @@ class ServiceConfiguration extends AbstractConfiguration
                 'autoconfigure' => true,
                 'public' => false
             ],
-            $psr4Prefix => [
+            trim(str_replace('/', '\\', ucfirst($psr4Prefix)), '\\') . '\\' => [
                 'resource' => '../Classes/*'
             ]
         ];
@@ -60,9 +60,14 @@ class ServiceConfiguration extends AbstractConfiguration
      */
     protected function load(): array
     {
-        $configuration = Yaml::parse(
-            file_get_contents($this->packagePath . self::CONFIGURATION_DIRECTORY . self::CONFIGURATION_FILE) ?: ''
-        );
+        try {
+            $configuration = Yaml::parse(
+                file_get_contents($this->packagePath . self::CONFIGURATION_DIRECTORY . self::CONFIGURATION_FILE) ?: ''
+            );
+        } catch (\Exception $e) {
+            // In case configuration can not be loaded / parsed return an empty array
+            return [];
+        }
 
         return is_array($configuration) ? $configuration : [];
     }
@@ -73,7 +78,7 @@ class ServiceConfiguration extends AbstractConfiguration
         if (isset($newConfiguration['imports'])) {
             $imports = $newConfiguration['imports'];
             unset($newConfiguration['imports']);
-            $newConfiguration['imports'] = $imports;
+            $newConfiguration = array_merge(['imports' => $imports], $newConfiguration);
         }
         return $newConfiguration;
     }

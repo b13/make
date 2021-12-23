@@ -42,7 +42,7 @@ class BackendControllerCommand extends SimpleComponentCommand
         return $backendController
             ->setName(
                 (string)$this->io->ask(
-                    'Enter the name of the backend controller (e.g. "AwesomeController")?',
+                    'Enter the name of the backend controller (e.g. "AwesomeController")',
                     null,
                     [$this, 'answerRequired']
                 )

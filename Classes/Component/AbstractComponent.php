@@ -28,7 +28,7 @@ abstract class AbstractComponent implements ComponentInterface
 
     public function __construct(string $psr4Prefix)
     {
-        $this->psr4Prefix = $psr4Prefix;
+        $this->psr4Prefix = ucfirst(trim(str_replace('/', '\\', $psr4Prefix), '\\')) . '\\';
     }
 
     public function getName(): string
@@ -38,7 +38,7 @@ abstract class AbstractComponent implements ComponentInterface
 
     public function setName(string $name): self
     {
-        $this->name = trim(str_replace('/', '\\', $name), '\\');
+        $this->name = ucfirst(str_replace(['/', '\\'], '', $name));
         return $this;
     }
 
@@ -55,10 +55,10 @@ abstract class AbstractComponent implements ComponentInterface
 
     public function getClassName(): string
     {
-        return $this->getNamespace() . '\\' . trim(str_replace('/', '\\', $this->name), '\\');
+        return $this->getNamespace() . '\\' . $this->name;
     }
 
-    public function getIdentifierProposal(string $prefix): string
+    public function getIdentifierProposal(string $prefix = ''): string
     {
         $packagePrefix = $prefix ?: mb_strtolower(
             trim(
@@ -71,6 +71,7 @@ abstract class AbstractComponent implements ComponentInterface
             ),
             'utf-8'
         );
+
         $identifier = mb_strtolower(
             trim(preg_replace('/(?<=\\w)([A-Z])/', '-\\1', $this->name) ?? '', '-'),
             'utf-8'
@@ -81,7 +82,7 @@ abstract class AbstractComponent implements ComponentInterface
 
     protected function getNamespace(): string
     {
-        return $this->psr4Prefix . rtrim(str_replace('/', '\\', $this->directory), '\\');
+        return rtrim($this->psr4Prefix . ucfirst(trim(str_replace('/', '\\', $this->directory), '\\')), '\\');
     }
 
     protected function createFileContent(string $fileName, array $replace): string

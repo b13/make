@@ -28,8 +28,8 @@ class EventListener extends AbstractComponent implements ServiceConfigurationCom
 
     public function getNameProposal(): string
     {
-        $parts = explode('\\',  ltrim($this->eventName, '\\')) ?: [];
-        return $parts !== [] ? end($parts) . 'Listener' : '';
+        $parts = explode('\\', ltrim($this->eventName, '\\'));
+        return end($parts) . 'Listener';
     }
 
     public function setIdentifier(string $identifier): self

@@ -81,7 +81,7 @@ class CommandCommand extends SimpleComponentCommand
             return false;
         }
 
-        $this->io->success('Sucessfully created the command ' . $component->getName() . ' (' . $component->getCommandName() . ').' );
+        $this->io->success('Sucessfully created the command ' . $component->getName() . ' (' . $component->getCommandName() . ').');
         return true;
     }
 }

@@ -15,7 +15,7 @@ namespace B13\Make\Component;
 /**
  * Command component
  */
-class Command extends AbstractComponent  implements ServiceConfigurationComponentInterface
+class Command extends AbstractComponent implements ServiceConfigurationComponentInterface
 {
     /** @var string */
     protected $commandName = '';

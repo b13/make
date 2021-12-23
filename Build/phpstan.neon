@@ -8,6 +8,9 @@ parameters:
   checkMissingIterableValueType: false
 
   ignoreErrors:
+    -
+      message: '#Call to an undefined method Prophecy\\Prophecy\\ObjectProphecy::.*#'
+      path: %currentWorkingDirectory%/Tests
     # Below is due to AbstractComponent providing fluent setters with return type "self"
     -
       message: '#Call to an undefined method B13\\Make\\Component\\AbstractComponent::set.*#'

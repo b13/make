@@ -20,8 +20,8 @@ setUpDockerComposeDotEnv() {
         echo "HOST_UID=`id -u`"
         # Your local home directory for composer and npm caching
         echo "HOST_HOME=${HOME}"
-        # Your local user
         echo "CORE_ROOT=${CORE_ROOT}"
+        # Your local user
         echo "HOST_USER=${USER}"
         echo "TEST_FILE=${TEST_FILE}"
         echo "PHP_XDEBUG_ON=${PHP_XDEBUG_ON}"
@@ -143,7 +143,7 @@ if ! command -v realpath &> /dev/null; then
   echo "Consider installing realpath for properly resolving symlinks" >&2
   CORE_ROOT="${PWD}/../../"
 else
-  CORE_ROOT=$(realpath "${PWD}/../../../")
+  CORE_ROOT=$(realpath "${PWD}/../../")
 fi
 
 # Option defaults

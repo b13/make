@@ -10,7 +10,7 @@ declare(strict_types=1);
  * of the License, or any later version.
  */
 
-namespace TYPO3\Tailor\Tests\Unit\Environment;
+namespace B13\Make\Tests\Unit\Environment;
 
 use B13\Make\Environment\Variables;
 use PHPUnit\Framework\TestCase;

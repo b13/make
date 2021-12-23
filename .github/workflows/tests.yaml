@@ -1,0 +1,57 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '30 3 * * *'
+
+jobs:
+
+  tests:
+    name: All tests
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        php: [ '7.2', '7.3' ] # 7.4 is disabled for now since composer automatically installs the highest possible TYPO3 version instead of v10
+        TYPO3: [ '10' ]
+        include:
+          - TYPO3: '11'
+            php: '7.4'
+          - TYPO3: '11'
+            php: '8.0'
+          - TYPO3: '11'
+            php: '8.1'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install testing system
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -s composerUpdate
+
+      - name: Composer validate
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composerValidate
+
+      - name: Lint PHP
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s lint
+
+      - name: CGL
+        run: Build/Scripts/runTests.sh -n -p ${{ matrix.php }} -s cgl
+
+      - name: phpstan
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -s phpstan
+
+      - name: Unit Tests
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s unit
+
+#      - name: Functional Tests with mariadb
+#        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -d mariadb -s functional
+#
+#      - name: Functional Tests with postgres
+#        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -d postgres -s functional
+#
+#      - name: Functional Tests with sqlite
+#        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -d sqlite -s functional
+#
+#      - name: Acceptance Tests
+#        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -s acceptance

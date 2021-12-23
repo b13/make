@@ -63,8 +63,10 @@ abstract class AbstractComponent implements ComponentInterface
         $packagePrefix = $prefix ?: mb_strtolower(
             trim(
                 preg_replace(
-                    '/(?<=\\w)([A-Z])/', '-\\1',
-                    trim(str_replace('\\', '/', $this->psr4Prefix), '/')) ?? '',
+                    '/(?<=\\w)([A-Z])/',
+                    '-\\1',
+                    trim(str_replace('\\', '/', $this->psr4Prefix), '/')
+                ) ?? '',
                 '-'
             ),
             'utf-8'

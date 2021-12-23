@@ -1,30 +1,56 @@
 {
-	"name": "b13/make",
-	"description": "Kickstarter CLI tool for various TYPO3 functionalities",
-	"type": "typo3-cms-extension",
-	"homepage": "https://b13.com",
-	"license": "GPL-2.0-or-later",
-	"keywords": ["TYPO3", "Kickstarter", "Extensions", "CLI"],
-	"authors": [
-		{
-			"name": "Oliver Bartsch",
-			"email": "oliver.bartsch@b13.com"
-		}
-	],
-	"require": {
-		"typo3/cms-core": "^10.0 || ^11.0 || ^12.0"
-	},
-	"require-dev": {
-		"roave/security-advisories": "dev-master"
-	},
-	"extra": {
-		"typo3/cms": {
-			"extension-key": "make"
-		}
-	},
-	"autoload": {
-		"psr-4": {
-			"B13\\Make\\": "Classes/"
-		}
-	}
+  "name": "b13/make",
+  "description": "Kickstarter CLI tool for various TYPO3 functionalities",
+  "type": "typo3-cms-extension",
+  "homepage": "https://b13.com",
+  "license": "GPL-2.0-or-later",
+  "keywords": [
+    "TYPO3",
+    "Kickstarter",
+    "Extensions",
+    "CLI"
+  ],
+  "authors": [
+    {
+      "name": "Oliver Bartsch",
+      "email": "oliver.bartsch@b13.com"
+    }
+  ],
+  "require": {
+    "typo3/cms-core": "^10.0 || ^11.0 || ^12.0"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-master",
+    "typo3/testing-framework": "^6.1",
+    "typo3/coding-standards": "^0.4.0",
+    "phpstan/phpstan": "^0.12.37",
+    "phpunit/phpunit": "^8.4"
+  },
+  "config": {
+    "vendor-dir": ".Build/vendor",
+    "bin-dir": ".Build/bin"
+  },
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "make",
+      "cms-package-dir": "{$vendor-dir}/typo3/cms",
+      "web-dir": ".Build/Web"
+    }
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare",
+      "if [ ! -e .Build/Web/vendor ]; then cd .Build/Web  && ln -s ../vendor && cd -; fi"
+    ]
+  },
+  "autoload": {
+    "psr-4": {
+      "B13\\Make\\": "Classes/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "B13\\Make\\Tests\\": "Tests/"
+    }
+  }
 }

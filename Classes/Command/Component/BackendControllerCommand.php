@@ -95,7 +95,7 @@ class BackendControllerCommand extends SimpleComponentCommand
             return false;
         }
 
-        $this->io->success('Sucessfully created the backend controller ' . $component->getName() . ' (' . $component->getRouteIdentifier() . ').' );
+        $this->io->success('Sucessfully created the backend controller ' . $component->getName() . ' (' . $component->getRouteIdentifier() . ').');
         return true;
     }
 }

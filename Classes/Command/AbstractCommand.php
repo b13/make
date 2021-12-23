@@ -27,6 +27,9 @@ abstract class AbstractCommand extends Command
         return Variables::has($key) ? Variables::get($key) : $default;
     }
 
+    /**
+     * @param mixed|string $answer
+     */
     public function answerRequired($answer): string
     {
         $answer = (string)$answer;
@@ -39,6 +42,8 @@ abstract class AbstractCommand extends Command
     }
 
     /**
+     * @param mixed|string $answer
+     *
      * @see https://getcomposer.org/doc/04-schema.md#name
      */
     public function validatePackageKey($answer): string

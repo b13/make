@@ -58,7 +58,7 @@ class ExtensionCommand extends AbstractCommand
         ];
         $question = $io->askQuestion((new ChoiceQuestion(
             'Choose supported TYPO3 versions (comma separate for multiple)',
-            array_combine([10,11,12], array_values($availableTypo3Versions)),
+            array_combine([10, 11, 12], array_values($availableTypo3Versions)),
             11
         ))->setMultiselect(true));
 
@@ -129,7 +129,7 @@ class ExtensionCommand extends AbstractCommand
             }
         }
 
-        $io->success('Sucessfully created the extension ' . $extension->getExtensionKey() . ' (' . $extension->getPackageName() . ').' );
+        $io->success('Sucessfully created the extension ' . $extension->getExtensionKey() . ' (' . $extension->getPackageName() . ').');
 
         return 0;
     }

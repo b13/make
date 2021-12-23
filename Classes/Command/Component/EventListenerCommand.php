@@ -48,7 +48,7 @@ class EventListenerCommand extends SimpleComponentCommand
             )
             ->setName(
                 (string)$this->io->ask(
-                    'Enter the name of the listener',
+                    'Enter the name of the listener (e.g. "AwesomeEventListener")',
                     $eventListener->getNameProposal()
                 )
             )

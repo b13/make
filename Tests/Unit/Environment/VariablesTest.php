@@ -41,7 +41,6 @@ class VariablesTest extends TestCase
         self::assertEquals('some value putenv', Variables::get('SOME_VALUE_PUTENV'));
     }
 
-
     /**
      * @test
      */

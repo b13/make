@@ -29,16 +29,15 @@ bin/typo3 make:extension
 ```
 
 All commands are interactive, which means you have to configure the
-extension or component by answering the displayed question. Most of
+extension or component by answering the displayed questions. Most of
 them autoamtically suggest a best practice default value, e.g. for
-identifiers  or namespaces, which can just be confirmed.
+identifiers or namespaces, which can just be confirmed.
 
 It's also possible to customize those default values using environemnt
 variables with the `B13_MAKE_` prefix. The full list is shown below:
 
 - `B13_MAKE_BACKEND_CONTROLLER_DIR` - Default directory for backend controllers
 - `B13_MAKE_BACKEND_CONTROLLER_PREFIX` - Default prefix for the backend controllers' route identifier
-- `B13_MAKE_BACKEND_METHOD_ANME` - Default method name for the backend controllers' main action (receiving the request)
 - `B13_MAKE_COMMAND_DIR` - Default directory for commands
 - `B13_MAKE_COMMAND_NAME_PREFIX` - Default prefix for commands
 - `B13_MAKE_EVENT_LISTENER_DIR` - Default directory for event listeners

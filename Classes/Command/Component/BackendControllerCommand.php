@@ -26,7 +26,7 @@ class BackendControllerCommand extends SimpleComponentCommand
     protected function configure(): void
     {
         parent::configure();
-        $this->setDescription('Create a new backend controller');
+        $this->setDescription('Create a backend controller');
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output): void

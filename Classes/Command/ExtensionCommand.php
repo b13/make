@@ -27,7 +27,7 @@ class ExtensionCommand extends AbstractCommand
 {
     protected function configure(): void
     {
-        $this->setDescription('Create a new extension');
+        $this->setDescription('Create a TYPO3 extension');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

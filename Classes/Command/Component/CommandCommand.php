@@ -26,7 +26,7 @@ class CommandCommand extends SimpleComponentCommand
     protected function configure(): void
     {
         parent::configure();
-        $this->setDescription('Create a new command');
+        $this->setDescription('Create a console command');
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output): void

@@ -14,33 +14,33 @@ services:
     tags:
       - name: 'console.command'
         command: 'make:backendcontroller'
-        description: 'Create a new backend controller'
+        description: 'Create a backend controller'
         schedulable: false
 
   B13\Make\Command\Component\CommandCommand:
     tags:
       - name: 'console.command'
         command: 'make:command'
-        description: 'Create a new command'
+        description: 'Create a console command'
         schedulable: false
 
   B13\Make\Command\Component\EventListenerCommand:
     tags:
       - name: 'console.command'
         command: 'make:eventlistener'
-        description: 'Create a new event listener'
+        description: 'Create a PSR-14 event listener'
         schedulable: false
 
   B13\Make\Command\ExtensionCommand:
     tags:
       - name: 'console.command'
         command: 'make:extension'
-        description: 'Create a new extension'
+        description: 'Create a TYPO3 extension'
         schedulable: false
 
   B13\Make\Command\Component\MiddlewareCommand:
     tags:
       - name: 'console.command'
         command: 'make:middleware'
-        description: 'Create a new middleware'
+        description: 'Create a PSR-15 middleware'
         schedulable: false

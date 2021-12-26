@@ -26,7 +26,7 @@ class EventListenerCommand extends SimpleComponentCommand
     protected function configure(): void
     {
         parent::configure();
-        $this->setDescription('Create a new event listener');
+        $this->setDescription('Create a PSR-14 event listener');
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output): void

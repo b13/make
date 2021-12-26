@@ -27,7 +27,7 @@ class MiddlewareCommand extends SimpleComponentCommand
     protected function configure(): void
     {
         parent::configure();
-        $this->setDescription('Create a new middleware');
+        $this->setDescription('Create a PSR-15 middleware');
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output): void

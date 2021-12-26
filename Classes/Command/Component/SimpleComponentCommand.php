@@ -97,7 +97,7 @@ abstract class SimpleComponentCommand extends AbstractCommand
         if (file_exists($componentFile)
             && !$this->io->confirm('The file ' . $componentFile . ' already exists. Do you want to override it?', true)
         ) {
-            $this->io->info('Aborting component generation.');
+            $this->io->note('Aborting component generation.');
             return 0;
         }
 
@@ -111,11 +111,11 @@ abstract class SimpleComponentCommand extends AbstractCommand
                 return 1;
             }
         } catch (AbortCommandException $e) {
-            $this->io->info($e->getMessage());
+            $this->io->note($e->getMessage());
             return 0;
         }
 
-        $this->io->info('You might want to flush the cache now');
+        $this->io->note('You might want to flush the cache now');
         return 0;
     }
 
@@ -208,7 +208,7 @@ abstract class SimpleComponentCommand extends AbstractCommand
     {
         $this->arrayConfiguration = new ArrayConfiguration($this->package->getPackagePath(), $file, $directory);
         if ($this->arrayConfiguration->getConfiguration() === []) {
-            $this->io->info('The configuration file ' . $directory . $file . ' does not yet exist. It will be automatically created.');
+            $this->io->note('The configuration file ' . $directory . $file . ' does not yet exist. It will be automatically created.');
         }
     }
 

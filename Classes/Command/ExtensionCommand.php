@@ -105,7 +105,7 @@ class ExtensionCommand extends AbstractCommand
         if (file_exists($composerFile)
             && !$io->confirm('A composer.json does already exist. Do you want to override it?', true)
         ) {
-            $io->info('Creating composer.json skipped');
+            $io->note('Creating composer.json skipped');
         } elseif (!GeneralUtility::writeFile($composerFile, json_encode($extension, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), true)) {
             $io->error('Creating composer.json failed');
             return 1;
@@ -117,7 +117,7 @@ class ExtensionCommand extends AbstractCommand
             if ($serviceConfiguration->getConfiguration() !== []
                 && !$io->confirm('A service configuration does already exist. Do you want to override it?', true)
             ) {
-                $io->info('Creating service configuration skipped');
+                $io->note('Creating service configuration skipped');
             } else {
                 $serviceConfiguration->createBasicServiceConfiguration($extension->getPsr4Prefix());
                 if (!$serviceConfiguration->write()) {
@@ -135,7 +135,7 @@ class ExtensionCommand extends AbstractCommand
             if (file_exists($extEmConfFile)
                 && !$io->confirm('A ext_emconf.php does already exist. Do you want to override it?', true)
             ) {
-                $io->info('Creating ext_emconf.php skipped');
+                $io->note('Creating ext_emconf.php skipped');
             } elseif (!GeneralUtility::writeFile($extEmConfFile, (string)$extension)) {
                 $io->error('Creating ' . $extEmConfFile . ' failed.');
                 return 1;
@@ -143,7 +143,7 @@ class ExtensionCommand extends AbstractCommand
         }
 
         $io->success('Sucessfully created the extension ' . $extension->getExtensionKey() . ' (' . $extension->getPackageName() . ').');
-        $io->info('Depending on your installation, the extension now might have to be activated manually.');
+        $io->note('Depending on your installation, the extension now might have to be activated manually.');
 
         return 0;
     }

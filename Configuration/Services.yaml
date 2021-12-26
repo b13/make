@@ -42,5 +42,5 @@ services:
     tags:
       - name: 'console.command'
         command: 'make:middleware'
-        description: 'Create a PSR-14 middleware'
+        description: 'Create a PSR-15 middleware'
         schedulable: false

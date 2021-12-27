@@ -30,10 +30,10 @@ bin/typo3 make:extension
 
 All commands are interactive, which means you have to configure the
 extension or component by answering the displayed questions. Most of
-them autoamtically suggest a best practice default value, e.g. for
+them automatically suggest a best practice default value, e.g. for
 identifiers or namespaces, which can just be confirmed.
 
-It's also possible to customize those default values using environemnt
+It's also possible to customize those default values using environment
 variables with the `B13_MAKE_` prefix. The full list is shown below:
 
 - `B13_MAKE_BACKEND_CONTROLLER_DIR` - Default directory for backend controllers
@@ -47,9 +47,9 @@ variables with the `B13_MAKE_` prefix. The full list is shown below:
 - `B13_MAKE_MIDDLEWARE_IDENTIFIER_PREFIX` - Default identifier prefix for middlewares
 - `B13_MAKE_MIDDLEWARE_TYPE` - Default context type for middlewares
 
-All component releated commands require an extension name, for which the
+All component related commands require an extension name, for which the
 component should be created. This can also be set as first argument or
-globally with the `B13_MAKE_EXTENSION_KEY` environemnt variable.
+globally with the `B13_MAKE_EXTENSION_KEY` environment variable.
 
 ## Commands
 

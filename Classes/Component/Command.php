@@ -71,7 +71,7 @@ class Command extends AbstractComponent implements ServiceConfigurationComponent
             [
                 'NAMESPACE' => $this->getNamespace(),
                 'NAME' => $this->name,
-                'DESCRIPTION' => $this->description,
+                'DESCRIPTION' => str_replace('\'', '\\\'', $this->description),
             ]
         );
     }

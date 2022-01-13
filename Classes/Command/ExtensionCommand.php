@@ -142,6 +142,16 @@ class ExtensionCommand extends AbstractCommand
             }
         }
 
+        // Create the "Classes/" folder
+        if (!file_exists($absoluteExtensionPath . 'Classes/')) {
+            try {
+                GeneralUtility::mkdir($absoluteExtensionPath . 'Classes/');
+            } catch (\Exception $e) {
+                $io->error('Creating of the "Classes/" folder in ' . $absoluteExtensionPath . ' failed');
+                return 1;
+            }
+        }
+
         $io->success('Sucessfully created the extension ' . $extension->getExtensionKey() . ' (' . $extension->getPackageName() . ').');
         $io->note('Depending on your installation, the extension now might have to be activated manually.');
 

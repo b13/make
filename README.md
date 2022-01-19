@@ -14,7 +14,7 @@ and  activate it in the Extension Manager of your TYPO3 installation.
 
 Note: This extension is compatible with TYPO3 v10, v11 and v12 and should
 only be used in development context. So please make sure it is excluded
-for production realeases.
+for production releases.
 
 ## Usage
 
@@ -67,5 +67,5 @@ This extension was created by Oliver Bartsch in 2021 for [b13 GmbH, Stuttgart](h
 
 [Find more TYPO3 extensions we have developed](https://b13.com/useful-typo3-extensions-from-b13-to-you)
 that help us deliver value in client projects. As part of the way we work,
-we focus on testing and best practices to ensure long-term performance,
+we focus on testing and best practices ensuring long-term performance,
 reliability, and results in all our code.

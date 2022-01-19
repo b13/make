@@ -18,7 +18,7 @@ use TYPO3\CMS\Core\Information\Typo3Version;
 call_user_func(static function () {
     $testbase = new \TYPO3\TestingFramework\Core\Testbase();
 
-    // These if's are for core testing (package typo3/cms) only. cms-composer-installer does
+    // These ifs are for core testing (package typo3/cms) only. cms-composer-installer does
     // not create the autoload-include.php file that sets these env vars and sets composer
     // mode to true. testing-framework can not be used without composer anyway, so it is safe
     // to do this here. This way it does not matter if 'bin/phpunit' or 'vendor/phpunit/phpunit/phpunit'

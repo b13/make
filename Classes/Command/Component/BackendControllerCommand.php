@@ -83,7 +83,7 @@ class BackendControllerCommand extends SimpleComponentCommand
 
         $routeConfiguration = $this->arrayConfiguration->getConfiguration();
         if (isset($routeConfiguration[$component->getRouteIdentifier()])
-            && !$this->io->confirm('The route identifer ' . $component->getRouteIdentifier() . ' already exists. Do you want to override it?', true)
+            && !$this->io->confirm('The route identifier ' . $component->getRouteIdentifier() . ' already exists. Do you want to override it?', true)
         ) {
             throw new AbortCommandException('Aborting backend controller generation.', 1639664754);
         }
@@ -95,7 +95,7 @@ class BackendControllerCommand extends SimpleComponentCommand
             return false;
         }
 
-        $this->io->success('Sucessfully created the backend controller ' . $component->getName() . ' (' . $component->getRouteIdentifier() . ').');
+        $this->io->success('Successfully created the backend controller ' . $component->getName() . ' (' . $component->getRouteIdentifier() . ').');
         return true;
     }
 }

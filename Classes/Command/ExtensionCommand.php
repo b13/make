@@ -152,7 +152,7 @@ class ExtensionCommand extends AbstractCommand
             }
         }
 
-        $io->success('Sucessfully created the extension ' . $extension->getExtensionKey() . ' (' . $extension->getPackageName() . ').');
+        $io->success('Successfully created the extension ' . $extension->getExtensionKey() . ' (' . $extension->getPackageName() . ').');
         $io->note('Depending on your installation, the extension now might have to be activated manually.');
 
         return 0;

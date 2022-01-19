@@ -90,7 +90,7 @@ class MiddlewareCommand extends SimpleComponentCommand
     {
         $middlewareConfiguration = $this->arrayConfiguration->getConfiguration();
         if (isset($middlewareConfiguration[$component->getType()][$component->getIdentifier()])
-            && !$this->io->confirm('The identifer ' . $component->getIdentifier() . ' already exists for type ' . $component->getType() . '. Do you want to override it?', true)
+            && !$this->io->confirm('The identifier ' . $component->getIdentifier() . ' already exists for type ' . $component->getType() . '. Do you want to override it?', true)
         ) {
             throw new AbortCommandException('Aborting middleware generation.', 1639664755);
         }
@@ -102,7 +102,7 @@ class MiddlewareCommand extends SimpleComponentCommand
             return false;
         }
 
-        $this->io->success('Sucessfully created the middleware ' . $component->getName() . ' (' . $component->getIdentifier() . ').');
+        $this->io->success('Successfully created the middleware ' . $component->getName() . ' (' . $component->getIdentifier() . ').');
         return true;
     }
 }

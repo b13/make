@@ -80,7 +80,7 @@ class EventListenerCommand extends SimpleComponentCommand
             return false;
         }
 
-        $this->io->success('Sucessfully created the event listener ' . $component->getName() . ' for event ' . $component->getEventName());
+        $this->io->success('Successfully created the event listener ' . $component->getName() . ' for event ' . $component->getEventName());
         return true;
     }
 }

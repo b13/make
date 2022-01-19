@@ -90,13 +90,13 @@ class VariablesTest extends TestCase
 
         putenv('B13_MAKE_OVERRIDE=');
         self::assertEquals('', Variables::get('OVERRIDE'));
-        putenv('B13_MAKE_OVERRIDE=overriden');
-        self::assertEquals('overriden', Variables::get('OVERRIDE'));
-        $_ENV['B13_MAKE_OVERRIDE'] = 'overriden2';
-        self::assertEquals('overriden2', Variables::get('OVERRIDE'));
+        putenv('B13_MAKE_OVERRIDE=overridden');
+        self::assertEquals('overridden', Variables::get('OVERRIDE'));
+        $_ENV['B13_MAKE_OVERRIDE'] = 'overridden2';
+        self::assertEquals('overridden2', Variables::get('OVERRIDE'));
         putenv('B13_MAKE_OVERRIDE=');
-        // Putenv can't override $_ENV so we still get `overriden2`
-        self::assertEquals('overriden2', Variables::get('OVERRIDE'));
+        // Putenv can't override $_ENV so we still get `overridden2`
+        self::assertEquals('overridden2', Variables::get('OVERRIDE'));
         $_ENV['B13_MAKE_OVERRIDE'] = '';
         self::assertEquals('', Variables::get('OVERRIDE'));
     }

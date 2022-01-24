@@ -148,7 +148,7 @@ abstract class SimpleComponentCommand extends AbstractCommand
 
     protected function getPsr4Prefix(PackageInterface $package): string
     {
-        return (string)key(($package->getValueFromComposerManifest('autoload')->{'psr-4'} ?? []));
+        return (string)key((array)($package->getValueFromComposerManifest('autoload')->{'psr-4'} ?? []));
     }
 
     protected function getExtensionClassesPath(PackageInterface $package, string $psr4Prefix): string

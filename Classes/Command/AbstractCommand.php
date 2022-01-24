@@ -51,7 +51,10 @@ abstract class AbstractCommand extends Command
         $answer = $this->answerRequired($answer);
 
         if (!preg_match('/^[a-z0-9]([_.-]?[a-z0-9]+)*\/[a-z0-9](([_.]?|-{0,2})[a-z0-9]+)*$/', $answer)) {
-            throw new InvalidPackageNameException('Package key does not match the allowed pattern.', 1639664760);
+            throw new InvalidPackageNameException(
+                'Package key does not match the allowed pattern. More information are available on https://getcomposer.org/doc/04-schema.md#name.',
+                1639664760
+            );
         }
 
         return $answer;

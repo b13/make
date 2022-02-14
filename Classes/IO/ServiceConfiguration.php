@@ -60,10 +60,14 @@ class ServiceConfiguration extends AbstractConfiguration
      */
     protected function load(): array
     {
+        $serviceConfiguration = $this->packagePath . self::CONFIGURATION_DIRECTORY . self::CONFIGURATION_FILE;
+
+        if (!file_exists($serviceConfiguration)) {
+            return [];
+        }
+
         try {
-            $configuration = Yaml::parse(
-                file_get_contents($this->packagePath . self::CONFIGURATION_DIRECTORY . self::CONFIGURATION_FILE) ?: ''
-            );
+            $configuration = Yaml::parse(file_get_contents($serviceConfiguration) ?: '');
         } catch (\Exception $e) {
             // In case configuration can not be loaded / parsed return an empty array
             return [];

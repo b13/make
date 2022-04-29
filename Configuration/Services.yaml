@@ -51,3 +51,9 @@ services:
         command: 'make:testing:setup'
         description: 'Create a docker based testing environment setup'
         schedulable: false
+  B13\Make\Command\AcceptanceTestsCommand:
+    tags:
+      - name: 'console.command'
+        command: 'make:acceptance'
+        description: 'Create files required to run acceptance tests'
+        schedulable: false

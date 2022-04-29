@@ -28,9 +28,20 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class AcceptanceTestsCommand extends AbstractCommand
 {
-    protected Filesystem $filesystem;
-    protected SymfonyStyle $io;
-    protected PackageInterface $package;
+    /**
+     * @var Filesystem $filesystem
+     */
+    protected $filesystem;
+
+    /**
+     * @var SymfonyStyle $io
+     */
+    protected $io;
+
+    /**
+     * @var PackageInterface $package
+     */
+    protected $package;
 
     protected function configure(): void
     {
@@ -117,7 +128,7 @@ class AcceptanceTestsCommand extends AbstractCommand
     {
         $composerFile = $packagePath . '/composer.json';
         $composerJson = file_get_contents($composerFile);
-        $composer = json_decode($composerJson, true, 512, JSON_THROW_ON_ERROR);
+        $composer = json_decode($composerJson, true);
         $namespace = rtrim($this->getNamespace(), '\\');
 
         // @todo: if a value already exists ask for permission to change it?!

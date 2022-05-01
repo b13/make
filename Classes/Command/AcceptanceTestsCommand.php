@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace B13\Make\Command;
 
-use B13\Make\PackageResolver;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -50,21 +49,14 @@ class AcceptanceTestsCommand extends AbstractCommand
         $this->filesystem = GeneralUtility::makeInstance(Filesystem::class);
     }
 
+    /**
+     * @throws \JsonException
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
+        $this->package = $this->askForPackage($this->io);
 
-        $packages = $this->getPackageResolver()->getPackageManager()->getActivePackages();
-        $choices = array_reduce($packages, function ($result, PackageInterface $package) {
-            if ($package->getPackageMetaData()->getPackageType() === 'typo3-cms-extension') {
-                $packageKey = $package->getPackageKey();
-                $result[$packageKey] = $packageKey;
-            }
-            return $result;
-        }, []);
-
-        $selectedPackageName = $this->io->choice('Select a package to create acceptance tests for', $choices);
-        $this->package = $this->getPackageResolver()->resolvePackage($selectedPackageName);
         $packageKey = $this->package->getPackageKey();
         $targetPackagePath = $this->package->getPackagePath();
 
@@ -192,11 +184,6 @@ class AcceptanceTestsCommand extends AbstractCommand
         } catch (IOException $exception) {
             $this->io->writeln('<error>Failed to save file in ' . $target . '</error>');
         }
-    }
-
-    protected function getPackageResolver(): PackageResolver
-    {
-        return GeneralUtility::makeInstance(PackageResolver::class);
     }
 
     protected function getNamespace(): string

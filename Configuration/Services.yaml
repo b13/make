@@ -44,3 +44,10 @@ services:
         command: 'make:middleware'
         description: 'Create a PSR-15 middleware'
         schedulable: false
+
+  B13\Make\Command\RunTestsCommand:
+    tags:
+      - name: 'console.command'
+        command: 'make:runtests'
+        description: 'Setup runTests.sh to run tests, linter, cgl in a Docker environment'
+        schedulable: false

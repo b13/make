@@ -53,8 +53,8 @@ class AcceptanceTestsCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
-        $packages = $this->getPackageResolver()->getPackageManager()->getActivePackages();
 
+        $packages = $this->getPackageResolver()->getPackageManager()->getActivePackages();
         $choices = array_reduce($packages, function ($result, PackageInterface $package) {
             if ($package->getPackageMetaData()->getPackageType() === 'typo3-cms-extension') {
                 $packageKey = $package->getPackageKey();
@@ -65,26 +65,35 @@ class AcceptanceTestsCommand extends AbstractCommand
 
         $selectedPackageName = $this->io->choice('Select a package to create acceptance tests for', $choices);
         $this->package = $this->getPackageResolver()->resolvePackage($selectedPackageName);
-
         $packageKey = $this->package->getPackageKey();
+        $targetPackagePath = $this->package->getPackagePath();
+
+        if ($this->updateComposerFile($targetPackagePath)) {
+            $this->io->writeln('<info>Updated composer.json for EXT:' . $packageKey . '</info>');
+        } else {
+            $this->io->writeln('<comment>Failed to update composer.json for EXT:' . $packageKey . '</comment>');
+        }
+
         $this->io->writeln('Selected package: ' . $packageKey);
         $finder = GeneralUtility::makeInstance(Finder::class);
 
-        $targetPackage = $this->package->getPackagePath();
         $codeTemplatePath = '/Resources/Private/CodeTemplates/AcceptanceTests';
         $templatePath = $this->getPackageResolver()->resolvePackage('b13/make')->getPackagePath() . $codeTemplatePath;
 
         $this->filesystem->mkdir([
-            $targetPackage . '/Tests/Acceptance',
-            $targetPackage . '/Tests/Acceptance/Fixtures',
-            $targetPackage . '/Tests/Acceptance/Application',
-            $targetPackage . '/Tests/Acceptance/Support/Extension'
+            $targetPackagePath . '/Tests/Acceptance/Fixtures',
+            $targetPackagePath . '/Tests/Acceptance/Application',
+            $targetPackagePath . '/Tests/Acceptance/Support/Extension'
         ]);
 
         // Create public folder which is required for e.g. acceptance tests to work
-        $publicFolderPath = $targetPackage . '/Resources/Public';
+        $publicFolderPath = $targetPackagePath . '/Resources/Public';
         if (!is_dir($publicFolderPath)) {
-            $createPublic = $this->io->confirm('Resource/Public is necessary e.g. for acceptance tests. Do you want to create it now?', true);
+            $createPublic = $this->io->confirm(
+                'Resource/Public is necessary e.g. for acceptance tests. Do you want to create it now?',
+                true
+            );
+
             if ($createPublic) {
                 $this->filesystem->mkdir([$publicFolderPath]);
                 // Ensure the folder will be detected by git and committed
@@ -95,7 +104,7 @@ class AcceptanceTestsCommand extends AbstractCommand
         $files = $finder->in($templatePath)->files();
 
         foreach ($files as $file) {
-            $target = $targetPackage . 'Tests' . explode('AcceptanceTests', $file->getRealPath())[1];
+            $target = $targetPackagePath . 'Tests' . explode('AcceptanceTests', $file->getRealPath())[1];
 
             if (!is_file($target)) {
                 $content = $file->getContents();
@@ -107,12 +116,6 @@ class AcceptanceTestsCommand extends AbstractCommand
                     $this->substituteMarkersAndSave($content, $target);
                 }
             }
-        }
-
-        if ($this->updateComposerFile($targetPackage)) {
-            $this->io->writeln('<info>Updated composer.json for EXT:' . $packageKey . '</info>');
-        } else {
-            $this->io->writeln('<comment>Failed to update composer.json for EXT:' . $packageKey . '</comment>');
         }
 
         return 0;
@@ -129,23 +132,39 @@ class AcceptanceTestsCommand extends AbstractCommand
         $composerFile = $packagePath . '/composer.json';
         $composerJson = file_get_contents($composerFile);
         $composer = json_decode($composerJson, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \JsonException('Could not parse ' . $composerFile);
+        }
+
         $namespace = rtrim($this->getNamespace(), '\\');
 
-        // @todo: if a value already exists ask for permission to change it?!
-        $composer['require-dev']['codeception/codeception'] = '^4.1';
-        $composer['require-dev']['codeception/module-asserts'] = '^1.2';
-        $composer['require-dev']['codeception/module-webdriver'] = '^1.1';
-        $composer['require-dev']['typo3/testing-framework'] = '^6.16.2';
+        $addToComposerFile = [
+            'require-dev' => [
+                'codeception/codeception' => '^4.1',
+                'codeception/module-asserts' => '^1.2',
+                'codeception/module-webdriver' => '^1.1',
+                'typo3/testing-framework' => '^6.16.2'
+            ],
+            'autoload-dev' => [
+                'psr-4' => [
+                    $namespace . '\\Tests\\' => 'Tests/'
+                ]
+            ],
+            'config' => [
+                'vendor-dir' => '.Build/vendor',
+                'bin-dir' => '.Build/bin',
+            ],
+            'extra' => [
+                'typo3/cms' => [
+                    'app-dir' => '.Build',
+                    'web-dir' => '.Build/Web',
+                ]
+            ]
+        ];
 
-        $composer['autoload-dev']['psr-4'][$namespace . '\\Tests\\'] = 'Tests/';
+        $enhancedComposer = $this->enhanceComposerFile($composer, $addToComposerFile);
 
-        $composer['config']['vendor-dir'] = '.Build/vendor';
-        $composer['config']['bin-dir'] = '.Build/bin';
-
-        $composer['extra']['typo3/cms']['app-dir'] = '.Build';
-        $composer['extra']['typo3/cms']['web-dir'] = '.Build/Web';
-
-        return GeneralUtility::writeFile($composerFile, json_encode($composer, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), true);
+        return GeneralUtility::writeFile($composerFile, json_encode($enhancedComposer, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), true);
     }
 
     /**
@@ -157,8 +176,16 @@ class AcceptanceTestsCommand extends AbstractCommand
     protected function substituteMarkersAndSave(string $content, string $target): void
     {
         $markerService = GeneralUtility::makeInstance(MarkerBasedTemplateService::class);
-        $templateContent = $markerService->substituteMarker($content, '{{NAMESPACE}}', rtrim($this->getNamespace(), '\\'));
-        $templateContent = $markerService->substituteMarker($templateContent, '{{EXTENSION_KEY}}', $this->package->getPackageKey());
+        $templateContent = $markerService->substituteMarker(
+            $content,
+            '{{NAMESPACE}}',
+            rtrim($this->getNamespace(), '\\')
+        );
+        $templateContent = $markerService->substituteMarker(
+            $templateContent,
+            '{{EXTENSION_KEY}}',
+            $this->package->getPackageKey()
+        );
 
         try {
             $this->filesystem->dumpFile($target, $templateContent);
@@ -175,5 +202,18 @@ class AcceptanceTestsCommand extends AbstractCommand
     protected function getNamespace(): string
     {
         return (string)key((array)($this->package->getValueFromComposerManifest('autoload')->{'psr-4'} ?? []));
+    }
+
+    private function enhanceComposerFile(array &$composer, array &$addToComposerFile): array
+    {
+        foreach ($addToComposerFile as $key => $value) {
+            if (is_array($value) && isset($composer[$key])) {
+                $this->enhanceComposerFile($composer[$key], $value);
+            } else {
+                $composer[$key] = $value;
+            }
+        }
+
+        return $composer;
     }
 }

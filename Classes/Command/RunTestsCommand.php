@@ -73,6 +73,11 @@ class RunTestsCommand extends AbstractCommand
             );
         }
 
+        $this->io->writeln('<info>Created docker environment for testing:</info>');
+        $filePaths = array_map(function ($ar) {return $ar['target'];}, $templatesToCreate);
+        $this->io->listing($filePaths);
+        $this->io->writeln('For details run "cd ' . $this->package->getPackagePath() . ' && ' . 'Build/Scripts/runTests.sh -h"');
+
         return 0;
     }
 
@@ -94,6 +99,9 @@ class RunTestsCommand extends AbstractCommand
 
         try {
             $this->filesystem->dumpFile($target, $templateContent);
+            if ((pathinfo($target)['extension'] ?? '') === 'sh') {
+                $this->filesystem->chmod([$target], 0770);
+            }
         } catch (IOException $exception) {
             $this->io->writeln('<error>Failed to save file in ' . $target . PHP_EOL . $exception->getMessage() . '</error>');
         }

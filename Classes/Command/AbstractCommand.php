@@ -81,7 +81,7 @@ abstract class AbstractCommand extends Command
             return $result;
         }, []);
 
-        $selectedPackageName = $io->choice('Select a package to create runTests for', $choices);
+        $selectedPackageName = $io->choice('Select a package to work on', $choices);
 
         return $this->getPackageResolver()->resolvePackage($selectedPackageName);
     }

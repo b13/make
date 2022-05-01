@@ -97,6 +97,13 @@ class RunTestsCommand extends AbstractCommand
             $this->package->getPackageKey()
         );
 
+        // Rename acceptance test suite as we want to use a more general name
+        $templateContent = $markerService->substituteMarker(
+            $templateContent,
+            'codecept run Backend',
+            'codecept run Application'
+        );
+
         try {
             $this->filesystem->dumpFile($target, $templateContent);
             if ((pathinfo($target)['extension'] ?? '') === 'sh') {

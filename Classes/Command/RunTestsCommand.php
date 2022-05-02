@@ -12,16 +12,14 @@ declare(strict_types=1);
 
 namespace B13\Make\Command;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
-use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 use TYPO3\CMS\Core\Package\PackageInterface;
-use TYPO3\CMS\Core\Service\MarkerBasedTemplateService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -40,6 +38,11 @@ class RunTestsCommand extends AbstractCommand
     protected $filesystem;
 
     /**
+     * @var Finder $finder
+     */
+    protected $finder;
+
+    /**
      * @var PackageInterface $package
      */
     protected $package;
@@ -48,6 +51,7 @@ class RunTestsCommand extends AbstractCommand
     {
         $this->setDescription('Setup runTests.sh to run tests, linter, cgl in a Docker environment');
         $this->filesystem = GeneralUtility::makeInstance(Filesystem::class);
+        $this->finder = GeneralUtility::makeInstance(Finder::class);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -55,67 +59,34 @@ class RunTestsCommand extends AbstractCommand
         $this->io = new SymfonyStyle($input, $output);
         $this->package = $this->askForPackage($this->io);
 
-        $templatesToCreate = [
-            [
-                'source' => 'https://raw.githubusercontent.com/TYPO3/styleguide/main/Build/Scripts/runTests.sh',
-                'target' => $this->package->getPackagePath() . 'Build/Scripts/runTests.sh'
-            ],
-            [
-                'source' => 'https://raw.githubusercontent.com/TYPO3/styleguide/main/Build/testing-docker/docker-compose.yml',
-                'target' => $this->package->getPackagePath() . 'Build/testing-docker/docker-compose.yml'
-            ]
-        ];
+        $codeTemplatePath = '/Resources/Private/CodeTemplates/RunTests';
+        $templatePath = $this->getPackageResolver()->resolvePackage('b13/make')->getPackagePath() . $codeTemplatePath;
+        $templatesToCreate = $this->finder->in($templatePath)->files();
+        $targetPackagePath = $this->package->getPackagePath();
 
         foreach ($templatesToCreate as $template) {
-            $this->prepareTemplate(
-                $template['source'],
-                $template['target']
-            );
+            $this->prepareTemplate($template, $targetPackagePath);
         }
 
-        $this->io->writeln('<info>Created docker environment for testing:</info>');
-        $filePaths = array_map(function ($ar) {return $ar['target'];}, $templatesToCreate);
-        $this->io->listing($filePaths);
         $this->io->writeln('For details run "cd ' . $this->package->getPackagePath() . ' && ' . 'Build/Scripts/runTests.sh -h"');
 
         return 0;
     }
 
-    protected function prepareTemplate(string $source, string $target): void
+    protected function prepareTemplate(SplFileInfo $file, string $target): void
     {
-        try {
-            $template = $this->getGuzzleClient()->get($source);
-        } catch (GuzzleException $exception) {
-            $this->io->writeln('<error>Failed to get remote file ' . $source . '</error>');
-            return;
-        }
-
-        $markerService = GeneralUtility::makeInstance(MarkerBasedTemplateService::class);
-        $templateContent = $markerService->substituteMarker(
-            $template->getBody(),
-            'styleguide',
-            $this->package->getPackageKey()
-        );
-
-        // Rename acceptance test suite as we want to use a more general name
-        $templateContent = $markerService->substituteMarker(
-            $templateContent,
-            'codecept run Backend',
-            'codecept run Application'
-        );
+        $target .= 'Build' . explode('RunTests', $file->getRealPath())[1];
+        $templateContent = str_replace('{{EXTENSION_KEY}}', $this->package->getPackageKey(), $file->getContents());
 
         try {
             $this->filesystem->dumpFile($target, $templateContent);
-            if ((pathinfo($target)['extension'] ?? '') === 'sh') {
+            if ($file->getExtension() === 'sh') {
                 $this->filesystem->chmod([$target], 0770);
             }
+
+            $this->io->writeln('<info>File saved ' . $target . '</info>');
         } catch (IOException $exception) {
             $this->io->writeln('<error>Failed to save file in ' . $target . PHP_EOL . $exception->getMessage() . '</error>');
         }
-    }
-
-    protected function getGuzzleClient(): Client
-    {
-        return GeneralUtility::makeInstance(GuzzleClientFactory::class)->getClient();
     }
 }

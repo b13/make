@@ -157,7 +157,7 @@ EXTRA_TEST_OPTIONS=""
 SCRIPT_VERBOSE=0
 CGLCHECK_DRY_RUN=""
 TYPO3="10"
-DOCKER_SELENIUM_IMAGE="selenium/standalone-chrome:3.141.59-20210713"
+DOCKER_SELENIUM_IMAGE="selenium/standalone-chrome:4.0.0-20211102"
 
 # Detect arm64 and use a seleniarm image.
 # In a perfect world selenium would have a arm64 integrated, but that is not on the horizon.

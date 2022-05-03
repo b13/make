@@ -66,15 +66,12 @@ abstract class AbstractCommand extends Command
 
     /**
      * Let user select a package to work with
-     *
-     * @param SymfonyStyle $io
-     * @return PackageInterface
      */
     public function askForPackage(SymfonyStyle $io): PackageInterface
     {
         $packages = $this->getPackageResolver()->getPackageManager()->getActivePackages();
         $choices = array_reduce($packages, function ($result, PackageInterface $package) {
-            if ($package->getPackageMetaData()->getPackageType() === 'typo3-cms-extension') {
+            if ($package->getValueFromComposerManifest('type') === 'typo3-cms-extension') {
                 $packageKey = $package->getPackageKey();
                 $result[$packageKey] = $packageKey;
             }

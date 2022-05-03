@@ -49,5 +49,5 @@ services:
     tags:
       - name: 'console.command'
         command: 'make:runtests'
-        description: 'Setup runTests.sh to run tests, linter, cgl in a Docker environment'
+        description: 'Setup runTests.sh and docker-compose.yml in the ./Build folder to run tests, linter, cgl in a Docker environment'
         schedulable: false

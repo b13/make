@@ -76,7 +76,7 @@ class BackendController extends AbstractComponent implements ArrayConfigurationC
     public function __toString(): string
     {
         return $this->createFileContent(
-            'BackendController',
+            'BackendController.php',
             [
                 'NAMESPACE' => $this->getNamespace(),
                 'NAME' => $this->name,

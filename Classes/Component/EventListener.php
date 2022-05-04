@@ -58,7 +58,7 @@ class EventListener extends AbstractComponent implements ServiceConfigurationCom
     public function __toString(): string
     {
         return $this->createFileContent(
-            'EventListener',
+            'EventListener.php',
             [
                 'NAMESPACE' => $this->getNamespace(),
                 'NAME' => $this->name,

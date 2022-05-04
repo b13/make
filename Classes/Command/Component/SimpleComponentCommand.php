@@ -82,8 +82,7 @@ abstract class SimpleComponentCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $component = $this->createComponent();
-
-        $absoluteComponentDirectory = $this->package->getPackagePath() . $this->getExtensionClassesPath($this->package, $this->psr4Prefix) . $component->getDirectory();
+        $absoluteComponentDirectory = $this->getAbsoluteComponentDirectory($component);
         if (!file_exists($absoluteComponentDirectory)) {
             try {
                 GeneralUtility::mkdir_deep($absoluteComponentDirectory);
@@ -93,9 +92,13 @@ abstract class SimpleComponentCommand extends AbstractCommand
             }
         }
 
-        $componentFile = rtrim($absoluteComponentDirectory, '/') . '/' . $component->getName() . '.php';
+        // Use .php in case no file extension was given
+        $fileInfo = pathinfo($component->getName());
+        $filename = $fileInfo['filename'] . '.' . (!empty($fileInfo['extension']) ? $fileInfo['extension'] : 'php');
+
+        $componentFile = rtrim($absoluteComponentDirectory, '/') . '/' . $filename;
         if (file_exists($componentFile)
-            && !$this->io->confirm('The file ' . $componentFile . ' already exists. Do you want to override it?', true)
+            && !$this->io->confirm('The file ' . $componentFile . ' already exists. Do you want to override it?')
         ) {
             $this->io->note('Aborting component generation.');
             return 0;
@@ -224,5 +227,10 @@ abstract class SimpleComponentCommand extends AbstractCommand
         }
 
         return $this->arrayConfiguration->write();
+    }
+
+    public function getAbsoluteComponentDirectory(ComponentInterface $component): string
+    {
+        return $this->package->getPackagePath() . $this->getExtensionClassesPath($this->package, $this->psr4Prefix) . $component->getDirectory();
     }
 }

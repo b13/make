@@ -45,7 +45,7 @@ services:
         description: 'Create a PSR-15 middleware'
         schedulable: false
 
-  B13\Make\Command\RunTestsCommand:
+  B13\Make\Command\Component\RunTestsCommand:
     tags:
       - name: 'console.command'
         command: 'make:runtests'

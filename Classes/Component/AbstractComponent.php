@@ -88,11 +88,11 @@ abstract class AbstractComponent implements ComponentInterface
     protected function createFileContent(string $fileName, array $replace): string
     {
         return (string)preg_replace_callback(
-            '/\{\{([A-Z]*)\}\}/',
+            '/\{\{([A-Z_]*)\}\}/',
             static function ($result) use ($replace): string {
                 return $replace[$result[1]] ?? $result[0];
             },
-            file_get_contents(__DIR__ . '/../../Resources/Private/CodeTemplates/' . $fileName . '.txt')
+            file_get_contents(__DIR__ . '/../../Resources/Private/CodeTemplates/' . $fileName)
         );
     }
 }

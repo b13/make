@@ -15,11 +15,7 @@ namespace B13\Make\Command;
 use B13\Make\Environment\Variables;
 use B13\Make\Exception\EmptyAnswerException;
 use B13\Make\Exception\InvalidPackageNameException;
-use B13\Make\PackageResolver;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use TYPO3\CMS\Core\Package\PackageInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Abstract command with basic functionalities
@@ -62,29 +58,5 @@ abstract class AbstractCommand extends Command
         }
 
         return $answer;
-    }
-
-    /**
-     * Let user select a package to work with
-     */
-    public function askForPackage(SymfonyStyle $io): PackageInterface
-    {
-        $packages = $this->getPackageResolver()->getPackageManager()->getActivePackages();
-        $choices = array_reduce($packages, function ($result, PackageInterface $package) {
-            if ($package->getValueFromComposerManifest('type') === 'typo3-cms-extension') {
-                $packageKey = $package->getPackageKey();
-                $result[$packageKey] = $packageKey;
-            }
-            return $result;
-        }, []);
-
-        $selectedPackageName = $io->choice('Select a package to work on', $choices);
-
-        return $this->getPackageResolver()->resolvePackage($selectedPackageName);
-    }
-
-    protected function getPackageResolver(): PackageResolver
-    {
-        return GeneralUtility::makeInstance(PackageResolver::class);
     }
 }

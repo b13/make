@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace B13\Make\Component;
 
 /**
- * Command component
+ * RunTests component
  */
 class RunTests extends AbstractComponent
 {
@@ -31,7 +31,7 @@ class RunTests extends AbstractComponent
         return $this;
     }
 
-    public function setName(string $name): self
+    public function setName(string $name): AbstractComponent
     {
         $this->name = $name;
         return $this;

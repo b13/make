@@ -64,8 +64,8 @@ abstract class SimpleComponentCommand extends AbstractCommand
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->io = new SymfonyStyle($input, $output);
-        $this->extensionKey = $this->getExtensionKey($input);
-        $this->package = $this->resolvePackage($this->extensionKey);
+        $this->package = $this->getPackage($input);
+        $this->extensionKey = $this->package->getPackageKey();
         if ($this->package === null || !$this->package->getValueFromComposerManifest()) {
             throw new InvalidPackageException(
                 'No or an invalid package found for extension key ' . $this->extensionKey . '. You may want to execute "bin/typo3 make:extension".',
@@ -117,28 +117,6 @@ abstract class SimpleComponentCommand extends AbstractCommand
 
         $this->io->note('You might want to flush the cache now');
         return 0;
-    }
-
-    /**
-     * Resolve extension key from either input argument, environment variable or CLI
-     */
-    protected function getExtensionKey(InputInterface $input): string
-    {
-        if ($input->hasArgument('extensionKey')
-            && ($key = ($input->getArgument('extensionKey') ?? '')) !== ''
-        ) {
-            return $key;
-        }
-
-        if (($key = $this->getProposalFromEnvironment('EXTENSION_KEY')) !== '') {
-            return $key;
-        }
-
-        return (string)$this->io->ask(
-            'Please enter the extension key. Note: You can also set this as argument or with an environment variable',
-            null,
-            [$this, 'answerRequired']
-        );
     }
 
     protected function resolvePackage(string $extensionKey): ?PackageInterface

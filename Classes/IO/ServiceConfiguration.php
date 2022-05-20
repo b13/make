@@ -50,7 +50,8 @@ class ServiceConfiguration extends AbstractConfiguration
                 'public' => false
             ],
             trim(str_replace('/', '\\', ucfirst($psr4Prefix)), '\\') . '\\' => [
-                'resource' => '../Classes/*'
+                'resource' => '../Classes/*',
+                'exclude' => '../Classes/Domain/Model/*'
             ]
         ];
     }

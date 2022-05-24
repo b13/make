@@ -31,9 +31,13 @@ abstract class AbstractCommand extends Command
     /** @var SymfonyStyle */
     protected $io;
 
+    /** @var PackageResolver */
+    protected $packageResolver;
+
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->io = new SymfonyStyle($input, $output);
+        $this->packageResolver = GeneralUtility::makeInstance(PackageResolver::class);
     }
 
     protected function getProposalFromEnvironment(string $key, string $default = ''): string
@@ -77,10 +81,10 @@ abstract class AbstractCommand extends Command
     /**
      * Let user select a package to work with
      */
-    public function askForPackage(SymfonyStyle $io): PackageInterface
+    public function askForPackage(SymfonyStyle $io): ?PackageInterface
     {
-        $packages = $this->getPackageResolver()->getPackageManager()->getActivePackages();
-        $choices = array_reduce($packages, function ($result, PackageInterface $package) {
+        $packages = $this->packageResolver->getPackageManager()->getActivePackages();
+        $choices = array_reduce($packages, static function ($result, PackageInterface $package) {
             if ($package->getValueFromComposerManifest('type') === 'typo3-cms-extension') {
                 $packageKey = $package->getPackageKey();
                 $result[$packageKey] = $packageKey;
@@ -90,27 +94,22 @@ abstract class AbstractCommand extends Command
 
         $selectedPackageName = $io->choice('Select a package to work on', $choices);
 
-        return $this->getPackageResolver()->resolvePackage($selectedPackageName);
-    }
-
-    protected function getPackageResolver(): PackageResolver
-    {
-        return GeneralUtility::makeInstance(PackageResolver::class);
+        return $this->packageResolver->resolvePackage($selectedPackageName);
     }
 
     /**
      * Resolve package using the extension key from either input argument, environment variable or CLI
      */
-    protected function getPackage(InputInterface $input): PackageInterface
+    protected function getPackage(InputInterface $input): ?PackageInterface
     {
         if ($input->hasArgument('extensionKey')
             && ($key = ($input->getArgument('extensionKey') ?? '')) !== ''
         ) {
-            return $this->getPackageResolver()->resolvePackage($key);
+            return $this->packageResolver->resolvePackage($key);
         }
 
         if (($key = $this->getProposalFromEnvironment('EXTENSION_KEY')) !== '') {
-            return $this->getPackageResolver()->resolvePackage($key);
+            return $this->packageResolver->resolvePackage($key);
         }
 
         return $this->askForPackage($this->io);

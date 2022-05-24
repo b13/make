@@ -23,7 +23,6 @@ use B13\Make\PackageResolver;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\Core\Package\PackageInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -32,9 +31,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 abstract class SimpleComponentCommand extends AbstractCommand
 {
-    /** @var SymfonyStyle */
-    protected $io;
-
     /** @var string */
     protected $extensionKey = '';
 
@@ -63,15 +59,16 @@ abstract class SimpleComponentCommand extends AbstractCommand
      */
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        $this->io = new SymfonyStyle($input, $output);
+        parent::initialize($input, $output);
+
         $this->package = $this->getPackage($input);
-        $this->extensionKey = $this->package->getPackageKey();
         if ($this->package === null || !$this->package->getValueFromComposerManifest()) {
             throw new InvalidPackageException(
                 'No or an invalid package found for extension key ' . $this->extensionKey . '. You may want to execute "bin/typo3 make:extension".',
                 1639664756
             );
         }
+        $this->extensionKey = $this->package->getPackageKey();
         $this->psr4Prefix = $this->getPsr4Prefix($this->package);
     }
 

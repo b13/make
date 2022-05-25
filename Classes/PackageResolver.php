@@ -37,4 +37,12 @@ class PackageResolver
             return null;
         }
     }
+
+    /**
+     * @return PackageInterface[]
+     */
+    public function getAvailablePackages(): array
+    {
+        return $this->packageManager->getAvailablePackages();
+    }
 }

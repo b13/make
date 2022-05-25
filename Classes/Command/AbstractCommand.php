@@ -92,6 +92,10 @@ abstract class AbstractCommand extends Command
             return $result;
         }, []);
 
+        if (!$choices) {
+            throw new \LogicException('No local extension found. You may want to execute "bin/typo3 make:extension".');
+        }
+
         $selectedPackageName = $io->choice('Select a package to work on', $choices);
 
         return $this->packageResolver->resolvePackage($selectedPackageName);

@@ -94,6 +94,7 @@ abstract class AbstractCommand extends Command
         }
 
         if (($key = $this->askForExtensionKey()) !== '') {
+            $this->io->note('You can also always set the extension key as argument or by using an environment variable.');
             return $this->packageResolver->resolvePackage($key);
         }
 

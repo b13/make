@@ -19,7 +19,6 @@ use B13\Make\Exception\AbortCommandException;
 use B13\Make\Exception\InvalidPackageException;
 use B13\Make\IO\ArrayConfiguration;
 use B13\Make\IO\ServiceConfiguration;
-use B13\Make\PackageResolver;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -64,7 +63,7 @@ abstract class SimpleComponentCommand extends AbstractCommand
         $this->package = $this->getPackage($input);
         if ($this->package === null || !$this->package->getValueFromComposerManifest()) {
             throw new InvalidPackageException(
-                'The requested package is invalid. You may want to execute "bin/typo3 make:extension".',
+                'The requested extension is invalid. You may want to execute "bin/typo3 make:extension".',
                 1639664756
             );
         }

@@ -85,7 +85,7 @@ abstract class AbstractCommand extends Command
     {
         $packages = $this->packageResolver->getPackageManager()->getActivePackages();
         $choices = array_reduce($packages, static function ($result, PackageInterface $package) {
-            if ($package->getValueFromComposerManifest('type') === 'typo3-cms-extension') {
+            if ($package->getValueFromComposerManifest('type') === 'typo3-cms-extension' && $package->getPackageKey() !== 'make') {
                 $packageKey = $package->getPackageKey();
                 $result[$packageKey] = $packageKey;
             }

@@ -64,7 +64,7 @@ abstract class SimpleComponentCommand extends AbstractCommand
         $this->package = $this->getPackage($input);
         if ($this->package === null || !$this->package->getValueFromComposerManifest()) {
             throw new InvalidPackageException(
-                'No or an invalid package found for extension key ' . $this->extensionKey . '. You may want to execute "bin/typo3 make:extension".',
+                'The requested package is invalid. You may want to execute "bin/typo3 make:extension".',
                 1639664756
             );
         }
@@ -114,11 +114,6 @@ abstract class SimpleComponentCommand extends AbstractCommand
 
         $this->io->note('You might want to flush the cache now');
         return 0;
-    }
-
-    protected function resolvePackage(string $extensionKey): ?PackageInterface
-    {
-        return GeneralUtility::makeInstance(PackageResolver::class)->resolvePackage($extensionKey);
     }
 
     protected function getPsr4Prefix(PackageInterface $package): string

@@ -79,29 +79,6 @@ abstract class AbstractCommand extends Command
     }
 
     /**
-     * Let user select a package to work with
-     */
-    public function askForPackage(SymfonyStyle $io): ?PackageInterface
-    {
-        $packages = $this->packageResolver->getPackageManager()->getActivePackages();
-        $choices = array_reduce($packages, static function ($result, PackageInterface $package) {
-            if ($package->getValueFromComposerManifest('type') === 'typo3-cms-extension' && $package->getPackageKey() !== 'make') {
-                $packageKey = $package->getPackageKey();
-                $result[$packageKey] = $packageKey;
-            }
-            return $result;
-        }, []);
-
-        if (!$choices) {
-            throw new \LogicException('No local extension found. You may want to execute "bin/typo3 make:extension".');
-        }
-
-        $selectedPackageName = $io->choice('Select a package to work on', $choices);
-
-        return $this->packageResolver->resolvePackage($selectedPackageName);
-    }
-
-    /**
      * Resolve package using the extension key from either input argument, environment variable or CLI
      */
     protected function getPackage(InputInterface $input): ?PackageInterface
@@ -116,6 +93,31 @@ abstract class AbstractCommand extends Command
             return $this->packageResolver->resolvePackage($key);
         }
 
-        return $this->askForPackage($this->io);
+        if (($key = $this->askForExtensionKey()) !== '') {
+            return $this->packageResolver->resolvePackage($key);
+        }
+
+        return null;
+    }
+
+    /**
+     * Let user select an extension to work with.
+     */
+    protected function askForExtensionKey(): string
+    {
+        $packages = $this->packageResolver->getAvailablePackages();
+        $choices = array_reduce($packages, static function ($result, PackageInterface $package) {
+            if ($package->getValueFromComposerManifest('type') === 'typo3-cms-extension' && $package->getPackageKey() !== 'make') {
+                $extensionKey = $package->getPackageKey();
+                $result[$extensionKey] = $extensionKey;
+            }
+            return $result;
+        }, []);
+
+        if (!$choices) {
+            throw new \LogicException('No local extension found. You may want to execute "bin/typo3 make:extension".');
+        }
+
+        return (string)$this->io->choice('Select a extension to work on', $choices);
     }
 }

@@ -38,8 +38,11 @@ class PackageResolver
         }
     }
 
-    public function getPackageManager(): PackageManager
+    /**
+     * @return PackageInterface[]
+     */
+    public function getAvailablePackages(): array
     {
-        return $this->packageManager;
+        return $this->packageManager->getAvailablePackages();
     }
 }

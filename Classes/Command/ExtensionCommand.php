@@ -32,9 +32,7 @@ class ExtensionCommand extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
-
-        $packageName = (string)$io->ask(
+        $packageName = (string)$this->io->ask(
             'Enter the composer package name (e.g. "vendor/awesome")',
             null,
             [$this, 'validatePackageKey']
@@ -42,12 +40,12 @@ class ExtensionCommand extends AbstractCommand
 
         [,$packageKey] = explode('/', $packageName);
 
-        $extensionKey = (string)$io->ask(
+        $extensionKey = (string)$this->io->ask(
             'Enter the extension key',
             str_replace('-', '_', $packageKey)
         );
 
-        $psr4Prefix = (string)$io->ask(
+        $psr4Prefix = (string)$this->io->ask(
             'Enter the PSR-4 namespace',
             str_replace(['_', '-'], [], ucwords($packageName, '/-_'))
         );
@@ -57,7 +55,7 @@ class ExtensionCommand extends AbstractCommand
             '^11.5' => 'TYPO3 v11 LTS',
             '^12.0' => 'TYPO3 v12 LTS',
         ];
-        $question = $io->askQuestion((new ChoiceQuestion(
+        $question = $this->io->askQuestion((new ChoiceQuestion(
             'Choose supported TYPO3 versions (comma separate for multiple)',
             array_combine([10, 11, 12], array_values($availableTypo3Versions)),
             11
@@ -69,13 +67,13 @@ class ExtensionCommand extends AbstractCommand
             $supportedTypo3Versions[$this->getMajorVersion($versionConstraint)] = $versionConstraint;
         }
 
-        $description = $io->ask(
+        $description = $this->io->ask(
             'Enter a description of the extension',
             null,
             [$this, 'answerRequired']
         );
 
-        $directory = (string)$io->ask(
+        $directory = (string)$this->io->ask(
             'Where should the extension be created?',
             $this->getProposalFromEnvironment('EXTENSION_DIR', 'src/extensions/')
         );
@@ -95,7 +93,7 @@ class ExtensionCommand extends AbstractCommand
             try {
                 GeneralUtility::mkdir_deep($absoluteExtensionPath);
             } catch (\Exception $e) {
-                $io->error('Creating of directory ' . $absoluteExtensionPath . ' failed');
+                $this->io->error('Creating of directory ' . $absoluteExtensionPath . ' failed');
                 return 1;
             }
         }
@@ -103,25 +101,25 @@ class ExtensionCommand extends AbstractCommand
         // Create composer.json
         $composerFile = rtrim($absoluteExtensionPath, '/') . '/composer.json';
         if (file_exists($composerFile)
-            && !$io->confirm('A composer.json does already exist. Do you want to override it?', true)
+            && !$this->io->confirm('A composer.json does already exist. Do you want to override it?', true)
         ) {
-            $io->note('Creating composer.json skipped');
+            $this->io->note('Creating composer.json skipped');
         } elseif (!GeneralUtility::writeFile($composerFile, json_encode($extension, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), true)) {
-            $io->error('Creating composer.json failed');
+            $this->io->error('Creating composer.json failed');
             return 1;
         }
 
         // Add basic service configuration if requested
-        if ($io->confirm('May we add a basic service configuration for you?', true)) {
+        if ($this->io->confirm('May we add a basic service configuration for you?', true)) {
             $serviceConfiguration = new ServiceConfiguration($absoluteExtensionPath);
             if ($serviceConfiguration->getConfiguration() !== []
-                && !$io->confirm('A service configuration does already exist. Do you want to override it?', true)
+                && !$this->io->confirm('A service configuration does already exist. Do you want to override it?', true)
             ) {
-                $io->note('Creating service configuration skipped');
+                $this->io->note('Creating service configuration skipped');
             } else {
                 $serviceConfiguration->createBasicServiceConfiguration($extension->getPsr4Prefix());
                 if (!$serviceConfiguration->write()) {
-                    $io->warning('Creating service configuration failed');
+                    $this->io->warning('Creating service configuration failed');
                     return 1;
                 }
             }
@@ -129,15 +127,15 @@ class ExtensionCommand extends AbstractCommand
 
         // Add ext_emconf.php if TYPO3 v10 or requested (default=NO)
         if (isset($supportedTypo3Versions[10])
-            || $io->confirm('May we create a ext_emconf.php for you?', false)
+            || $this->io->confirm('May we create a ext_emconf.php for you?', false)
         ) {
             $extEmConfFile = rtrim($absoluteExtensionPath, '/') . '/ext_emconf.php';
             if (file_exists($extEmConfFile)
-                && !$io->confirm('A ext_emconf.php does already exist. Do you want to override it?', true)
+                && !$this->io->confirm('A ext_emconf.php does already exist. Do you want to override it?')
             ) {
-                $io->note('Creating ext_emconf.php skipped');
+                $this->io->note('Creating ext_emconf.php skipped');
             } elseif (!GeneralUtility::writeFile($extEmConfFile, (string)$extension)) {
-                $io->error('Creating ' . $extEmConfFile . ' failed.');
+                $this->io->error('Creating ' . $extEmConfFile . ' failed.');
                 return 1;
             }
         }
@@ -147,13 +145,13 @@ class ExtensionCommand extends AbstractCommand
             try {
                 GeneralUtility::mkdir($absoluteExtensionPath . 'Classes/');
             } catch (\Exception $e) {
-                $io->error('Creating of the "Classes/" folder in ' . $absoluteExtensionPath . ' failed');
+                $this->io->error('Creating of the "Classes/" folder in ' . $absoluteExtensionPath . ' failed');
                 return 1;
             }
         }
 
-        $io->success('Successfully created the extension ' . $extension->getExtensionKey() . ' (' . $extension->getPackageName() . ').');
-        $io->note('Depending on your installation, the extension now might have to be activated manually.');
+        $this->io->success('Successfully created the extension ' . $extension->getExtensionKey() . ' (' . $extension->getPackageName() . ').');
+        $this->io->note('Depending on your installation, the extension now might have to be activated manually.');
 
         return 0;
     }

@@ -14,7 +14,6 @@ namespace B13\Make\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -33,11 +32,6 @@ class AcceptanceTestsCommand extends AbstractCommand
     protected $filesystem;
 
     /**
-     * @var SymfonyStyle $io
-     */
-    protected $io;
-
-    /**
      * @var PackageInterface $package
      */
     protected $package;
@@ -54,8 +48,7 @@ class AcceptanceTestsCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->io = new SymfonyStyle($input, $output);
-        $this->package = $this->askForPackage($this->io);
+        $this->package = $this->packageResolver->resolvePackage($this->askForExtensionKey());
 
         $packageKey = $this->package->getPackageKey();
         $targetPackagePath = $this->package->getPackagePath();
@@ -70,7 +63,7 @@ class AcceptanceTestsCommand extends AbstractCommand
         $finder = GeneralUtility::makeInstance(Finder::class);
 
         $codeTemplatePath = '/Resources/Private/CodeTemplates/AcceptanceTests';
-        $templatePath = $this->getPackageResolver()->resolvePackage('b13/make')->getPackagePath() . $codeTemplatePath;
+        $templatePath = $this->packageResolver->resolvePackage('b13/make')->getPackagePath() . $codeTemplatePath;
 
         $this->filesystem->mkdir([
             $targetPackagePath . '/Tests/Acceptance/Fixtures',

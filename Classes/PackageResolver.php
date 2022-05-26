@@ -37,9 +37,4 @@ class PackageResolver
             return null;
         }
     }
-
-    public function getPackageManager(): PackageManager
-    {
-        return $this->packageManager;
-    }
 }

@@ -25,7 +25,7 @@ class RunTestsCommand extends SimpleComponentCommand
     /**
      * @var string $folder
      */
-    protected $folder;
+    protected $folder = '';
 
     /**
      * @var string $file
@@ -38,26 +38,15 @@ class RunTestsCommand extends SimpleComponentCommand
         $this->setDescription('Setup runTests.sh and docker-compose.yml in the ./Build folder to run tests, linter, cgl in a Docker environment');
     }
 
-    protected function initialize(InputInterface $input, OutputInterface $output): void
-    {
-        parent::initialize($input, $output);
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // Define which files to use for make:runtests
-        $codeTemplates = [
-            'runTests.sh' => 'Build/Scripts/',
-            'docker-compose.yml' => 'Build/testing-docker/',
-        ];
+        $this->file = 'runTests.sh';
+        $this->folder = 'Build/Scripts/';
+        parent::execute($input, $output);
 
-        foreach ($codeTemplates as $file => $folder) {
-            $this->file = $file;
-            $this->folder = $folder;
-            $this->initializeArrayConfiguration($file, $folder);
-
-            parent::execute($input, $output);
-        }
+        $this->file = 'docker-compose.yml';
+        $this->folder = 'Build/testing-docker/';
+        parent::execute($input, $output);
 
         $this->io->note('For details run "cd ' . $this->package->getPackagePath() . ' && ' . 'bash Build/Scripts/runTests.sh -h"');
 
@@ -80,6 +69,6 @@ class RunTestsCommand extends SimpleComponentCommand
     protected function publishComponentConfiguration(ComponentInterface $component): bool
     {
         // As we do not need to publish a configuration, we just return true
-        return false;
+        return true;
     }
 }

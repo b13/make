@@ -45,6 +45,9 @@ abstract class SimpleComponentCommand extends AbstractCommand
     /** @var ArrayConfiguration */
     protected $arrayConfiguration;
 
+    /** @var bool */
+    protected $showFlushCacheMessage = true;
+
     abstract protected function createComponent(): ComponentInterface;
     abstract protected function publishComponentConfiguration(ComponentInterface $component): bool;
 
@@ -78,8 +81,8 @@ abstract class SimpleComponentCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $component = $this->createComponent();
+        $absoluteComponentDirectory = $this->getAbsoluteComponentDirectory($component);
 
-        $absoluteComponentDirectory = $this->package->getPackagePath() . $this->getExtensionClassesPath($this->package, $this->psr4Prefix) . $component->getDirectory();
         if (!file_exists($absoluteComponentDirectory)) {
             try {
                 GeneralUtility::mkdir_deep($absoluteComponentDirectory);
@@ -89,9 +92,13 @@ abstract class SimpleComponentCommand extends AbstractCommand
             }
         }
 
-        $componentFile = rtrim($absoluteComponentDirectory, '/') . '/' . $component->getName() . '.php';
+        // Use .php in case no file extension was given
+        $fileInfo = pathinfo($component->getName());
+        $filename = $fileInfo['filename'] . '.' . (($fileInfo['extension'] ?? false) ? $fileInfo['extension'] : 'php');
+
+        $componentFile = rtrim($absoluteComponentDirectory, '/') . '/' . $filename;
         if (file_exists($componentFile)
-            && !$this->io->confirm('The file ' . $componentFile . ' already exists. Do you want to override it?', true)
+            && !$this->io->confirm('The file ' . $componentFile . ' already exists. Do you want to override it?')
         ) {
             $this->io->note('Aborting component generation.');
             return 0;
@@ -111,7 +118,10 @@ abstract class SimpleComponentCommand extends AbstractCommand
             return 0;
         }
 
-        $this->io->note('You might want to flush the cache now');
+        if ($this->showFlushCacheMessage) {
+            $this->io->note('You might want to flush the cache now');
+        }
+
         return 0;
     }
 
@@ -185,7 +195,7 @@ abstract class SimpleComponentCommand extends AbstractCommand
     /**
      * Write the updated array configuration for the current package
      */
-    public function writeArrayConfiguration(): bool
+    protected function writeArrayConfiguration(): bool
     {
         if ($this->arrayConfiguration->getConfiguration() === []) {
             // Array configuration was not properly set
@@ -193,5 +203,17 @@ abstract class SimpleComponentCommand extends AbstractCommand
         }
 
         return $this->arrayConfiguration->write();
+    }
+
+    /**
+     * Returns the absolute path to the component directory, while assuming that all
+     * components are in the extensions classes directory. Can be overwritten in commands,
+     * if this is not the case.
+     */
+    protected function getAbsoluteComponentDirectory(ComponentInterface $component): string
+    {
+        return $this->package->getPackagePath()
+            . $this->getExtensionClassesPath($this->package, $this->psr4Prefix)
+            . $component->getDirectory();
     }
 }

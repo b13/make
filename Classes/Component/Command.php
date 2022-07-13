@@ -67,7 +67,7 @@ class Command extends AbstractComponent implements ServiceConfigurationComponent
     public function __toString(): string
     {
         return $this->createFileContent(
-            'Command',
+            'Command.php',
             [
                 'NAMESPACE' => $this->getNamespace(),
                 'NAME' => $this->name,

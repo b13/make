@@ -44,3 +44,10 @@ services:
         command: 'make:middleware'
         description: 'Create a PSR-15 middleware'
         schedulable: false
+
+  B13\Make\Command\Component\TestingSetupCommand:
+    tags:
+      - name: 'console.command'
+        command: 'make:testing:setup'
+        description: 'Create a docker based testing environment setup'
+        schedulable: false

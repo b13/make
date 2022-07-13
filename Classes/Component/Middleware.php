@@ -66,7 +66,7 @@ class Middleware extends AbstractComponent implements ArrayConfigurationComponen
     public function __toString(): string
     {
         return $this->createFileContent(
-            'Middleware',
+            'Middleware.php',
             [
                 'NAMESPACE' => $this->getNamespace(),
                 'NAME' => $this->name,

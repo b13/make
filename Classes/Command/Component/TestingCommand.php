@@ -13,14 +13,14 @@ declare(strict_types=1);
 namespace B13\Make\Command\Component;
 
 use B13\Make\Component\ComponentInterface;
-use B13\Make\Component\RunTests;
+use B13\Make\Component\Testing;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command for creating docker based test environment for a TYPO3 extension
+ * Command for creating docker based testing environment
  */
-class RunTestsCommand extends SimpleComponentCommand
+class TestingCommand extends SimpleComponentCommand
 {
     /**
      * @var string $folder
@@ -35,11 +35,13 @@ class RunTestsCommand extends SimpleComponentCommand
     protected function configure(): void
     {
         parent::configure();
-        $this->setDescription('Setup runTests.sh and docker-compose.yml in the ./Build folder to run tests, linter, cgl in a Docker environment');
+        $this->setDescription('Create a docker based testing environment');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->showFlushCacheMessage = false;
+
         $this->file = 'runTests.sh';
         $this->folder = 'Build/Scripts/';
         parent::execute($input, $output);
@@ -48,7 +50,10 @@ class RunTestsCommand extends SimpleComponentCommand
         $this->folder = 'Build/testing-docker/';
         parent::execute($input, $output);
 
-        $this->io->note('For details run "cd ' . $this->package->getPackagePath() . ' && ' . 'bash Build/Scripts/runTests.sh -h"');
+        $this->io->success(
+            'The docker based testing environment is ready. You can enter the root directory of ' .
+            $this->package->getPackageKey() . ' and execute: "bash Build/Scripts/runTests.sh -h"'
+        );
 
         return 0;
     }
@@ -60,7 +65,7 @@ class RunTestsCommand extends SimpleComponentCommand
 
     protected function createComponent(): ComponentInterface
     {
-        return (new RunTests($this->psr4Prefix))
+        return (new Testing($this->psr4Prefix))
             ->setExtensionKey($this->extensionKey)
             ->setDirectory($this->folder)
             ->setName($this->file);

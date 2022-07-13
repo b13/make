@@ -50,6 +50,9 @@ abstract class SimpleComponentCommand extends AbstractCommand
     /** @var ArrayConfiguration */
     protected $arrayConfiguration;
 
+    /** @var string */
+    protected $showFlushCacheMessage = true;
+
     abstract protected function createComponent(): ComponentInterface;
     abstract protected function publishComponentConfiguration(ComponentInterface $component): bool;
 
@@ -82,7 +85,10 @@ abstract class SimpleComponentCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $component = $this->createComponent();
-        $absoluteComponentDirectory = $this->getAbsoluteComponentDirectory($component);
+        $absoluteComponentDirectory = $this->package->getPackagePath()
+            . $this->getExtensionClassesPath($this->package, $this->psr4Prefix)
+            . $component->getDirectory();
+
         if (!file_exists($absoluteComponentDirectory)) {
             try {
                 GeneralUtility::mkdir_deep($absoluteComponentDirectory);
@@ -94,7 +100,7 @@ abstract class SimpleComponentCommand extends AbstractCommand
 
         // Use .php in case no file extension was given
         $fileInfo = pathinfo($component->getName());
-        $filename = $fileInfo['filename'] . '.' . (!empty($fileInfo['extension']) ? $fileInfo['extension'] : 'php');
+        $filename = $fileInfo['filename'] . '.' . (($fileInfo['extension'] ?? false) ? $fileInfo['extension'] : 'php');
 
         $componentFile = rtrim($absoluteComponentDirectory, '/') . '/' . $filename;
         if (file_exists($componentFile)
@@ -118,7 +124,10 @@ abstract class SimpleComponentCommand extends AbstractCommand
             return 0;
         }
 
-        $this->io->note('You might want to flush the cache now');
+        if ($this->showFlushCacheMessage) {
+            $this->io->note('You might want to flush the cache now');
+        }
+
         return 0;
     }
 
@@ -227,10 +236,5 @@ abstract class SimpleComponentCommand extends AbstractCommand
         }
 
         return $this->arrayConfiguration->write();
-    }
-
-    public function getAbsoluteComponentDirectory(ComponentInterface $component): string
-    {
-        return $this->package->getPackagePath() . $this->getExtensionClassesPath($this->package, $this->psr4Prefix) . $component->getDirectory();
     }
 }

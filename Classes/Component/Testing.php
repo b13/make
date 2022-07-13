@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace B13\Make\Component;
 
 /**
- * RunTests component
+ * Testing environment component
  */
-class RunTests extends AbstractComponent
+class Testing extends AbstractComponent
 {
     /** @var string */
     protected $extensionKey = '';

@@ -45,9 +45,9 @@ services:
         description: 'Create a PSR-15 middleware'
         schedulable: false
 
-  B13\Make\Command\Component\RunTestsCommand:
+  B13\Make\Command\Component\TestingCommand:
     tags:
       - name: 'console.command'
-        command: 'make:runtests'
-        description: 'Setup runTests.sh and docker-compose.yml in the ./Build folder to run tests, linter, cgl in a Docker environment'
+        command: 'make:testing'
+        description: 'Create a docker based testing environment'
         schedulable: false

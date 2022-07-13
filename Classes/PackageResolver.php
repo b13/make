@@ -29,12 +29,20 @@ class PackageResolver
         $this->packageManager = $packageManager;
     }
 
-    public function resolvePackage(string $extensionkey): ?PackageInterface
+    public function resolvePackage(string $extensionKey): ?PackageInterface
     {
         try {
-            return $this->packageManager->getPackage($extensionkey);
+            return $this->packageManager->getPackage($extensionKey);
         } catch (UnknownPackageException $e) {
             return null;
         }
+    }
+
+    /**
+     * @return PackageInterface[]
+     */
+    public function getAvailablePackages(): array
+    {
+        return $this->packageManager->getAvailablePackages();
     }
 }

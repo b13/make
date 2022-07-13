@@ -23,7 +23,10 @@ class ServiceConfigurationTest extends TestCase
     private const TEST_DIRECTORY = '/tests';
     private const PACKAGE_PATH = self::TEST_DIRECTORY . '/ServiceConfigurationTest';
     private const TEST_CONFIGURATION = [
-        'services' => ['_defaults' => ['public' => true], 'Vendor\\Extension\\' => ['resource' => '../Classes/*']]
+        'services' => [
+            '_defaults' => ['public' => true],
+            'Vendor\\Extension\\' => ['resource' => '../Classes/*', 'exclude' => '../Classes/Domain/Model/*']
+        ]
     ];
 
     protected function setUp(): void
@@ -74,7 +77,8 @@ class ServiceConfigurationTest extends TestCase
                 'public' => false
             ],
             'Vendor\\Extension\\' => [
-                'resource' => '../Classes/*'
+                'resource' => '../Classes/*',
+                'exclude' => '../Classes/Domain/Model/*'
             ]
         ];
 

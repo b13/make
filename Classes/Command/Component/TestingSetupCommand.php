@@ -60,11 +60,6 @@ class TestingSetupCommand extends SimpleComponentCommand
         return 0;
     }
 
-    public function getAbsoluteComponentDirectory(ComponentInterface $component): string
-    {
-        return $this->package->getPackagePath() . $this->folder;
-    }
-
     protected function createComponent(): ComponentInterface
     {
         return (new TestingSetup($this->psr4Prefix))
@@ -77,5 +72,10 @@ class TestingSetupCommand extends SimpleComponentCommand
     {
         // As we do not need to publish a configuration, we just return true
         return true;
+    }
+
+    protected function getAbsoluteComponentDirectory(ComponentInterface $component): string
+    {
+        return $this->package->getPackagePath() . $this->folder;
     }
 }

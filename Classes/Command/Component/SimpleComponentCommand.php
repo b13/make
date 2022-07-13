@@ -81,9 +81,7 @@ abstract class SimpleComponentCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $component = $this->createComponent();
-        $absoluteComponentDirectory = $this->package->getPackagePath()
-            . $this->getExtensionClassesPath($this->package, $this->psr4Prefix)
-            . $component->getDirectory();
+        $absoluteComponentDirectory = $this->getAbsoluteComponentDirectory($component);
 
         if (!file_exists($absoluteComponentDirectory)) {
             try {
@@ -197,7 +195,7 @@ abstract class SimpleComponentCommand extends AbstractCommand
     /**
      * Write the updated array configuration for the current package
      */
-    public function writeArrayConfiguration(): bool
+    protected function writeArrayConfiguration(): bool
     {
         if ($this->arrayConfiguration->getConfiguration() === []) {
             // Array configuration was not properly set
@@ -205,5 +203,17 @@ abstract class SimpleComponentCommand extends AbstractCommand
         }
 
         return $this->arrayConfiguration->write();
+    }
+
+    /**
+     * Returns the absolute path to the component directory, while assuming that all
+     * components are in the extensions classes directory. Can be overwritten in commands,
+     * if this is not the case.
+     */
+    protected function getAbsoluteComponentDirectory(ComponentInterface $component): string
+    {
+        return $this->package->getPackagePath()
+            . $this->getExtensionClassesPath($this->package, $this->psr4Prefix)
+            . $component->getDirectory();
     }
 }

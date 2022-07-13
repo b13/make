@@ -45,7 +45,7 @@ abstract class SimpleComponentCommand extends AbstractCommand
     /** @var ArrayConfiguration */
     protected $arrayConfiguration;
 
-    /** @var string */
+    /** @var bool */
     protected $showFlushCacheMessage = true;
 
     abstract protected function createComponent(): ComponentInterface;

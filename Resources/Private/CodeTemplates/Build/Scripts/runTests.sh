@@ -330,10 +330,18 @@ case ${TEST_SUITE} in
         docker-compose down
         ;;
     update)
+        # prune unused, dangling local volumes
+        echo "> prune unused, dangling local volumes"
+        docker volume ls -q -f driver=local -f dangling=true | awk '$0 ~ /^[0-9a-f]{64}$/ { print }' | xargs -I {} docker volume rm {}
+        echo ""
         # pull typo3/core-testing-*:latest versions of those ones that exist locally
+        echo "> pull typo3/core-testing-*:latest versions of those ones that exist locally"
         docker images typo3/core-testing-*:latest --format "{{.Repository}}:latest" | xargs -I {} docker pull {}
+        echo ""
         # remove "dangling" typo3/core-testing-* images (those tagged as <none>)
+        echo "> remove \"dangling\" typo3/core-testing-* images (those tagged as <none>)"
         docker images typo3/core-testing-* --filter "dangling=true" --format "{{.ID}}" | xargs -I {} docker rmi {}
+        echo ""
         ;;
     *)
         echo "Invalid -s option argument ${TEST_SUITE}" >&2

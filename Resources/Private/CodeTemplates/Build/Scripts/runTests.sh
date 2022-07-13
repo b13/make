@@ -33,6 +33,8 @@ setUpDockerComposeDotEnv() {
         echo "SCRIPT_VERBOSE=${SCRIPT_VERBOSE}"
         echo "CGLCHECK_DRY_RUN=${CGLCHECK_DRY_RUN}"
         echo "DOCKER_SELENIUM_IMAGE=${DOCKER_SELENIUM_IMAGE}"
+        echo "IS_CORE_CI=${IS_CORE_CI}"
+        echo "PHPSTAN_CONFIG_FILE=${PHPSTAN_CONFIG_FILE}"
     } > .env
 }
 
@@ -158,6 +160,14 @@ SCRIPT_VERBOSE=0
 CGLCHECK_DRY_RUN=""
 TYPO3="10"
 DOCKER_SELENIUM_IMAGE="selenium/standalone-chrome:4.0.0-20211102"
+IS_CORE_CI=0
+PHPSTAN_CONFIG_FILE="phpstan.local.neon"
+
+# ENV var "CI" is set by gitlab-ci. We use it here to distinct 'local' and 'CI' environment.
+if [ "$CI" == "true" ]; then
+    IS_CORE_CI=1
+    PHPSTAN_CONFIG_FILE="phpstan.ci.neon"
+fi
 
 # Detect arm64 and use a seleniarm image.
 # In a perfect world selenium would have a arm64 integrated, but that is not on the horizon.
@@ -331,5 +341,14 @@ case ${TEST_SUITE} in
         echo "${HELP}" >&2
         exit 1
 esac
+
+echo "###########################################################################" >&2
+echo "Result of ${TEST_SUITE}" >&2
+if [[ ${IS_CORE_CI} -eq 1 ]]; then
+    echo "Environment: CI" >&2
+else
+    echo "Environment: local" >&2
+fi
+echo "PHP: ${PHP_VERSION}" >&2
 
 exit $SUITE_EXIT_CODE

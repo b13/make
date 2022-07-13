@@ -303,7 +303,7 @@ services:
           set -x
         fi
         php -v | grep '^PHP';
-        php -dxdebug.mode=off .Build/bin/phpstan analyze -c Build/phpstan.neon --no-progress --no-interaction
+        php -dxdebug.mode=off .Build/bin/phpstan analyze -c Build/${PHPSTAN_CONFIG_FILE} --no-progress --no-interaction
       "
 
   unit:

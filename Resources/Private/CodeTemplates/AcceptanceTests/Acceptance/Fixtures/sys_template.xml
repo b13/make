@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+    <sys_template>
+        <uid>1</uid>
+        <pid>1</pid>
+        <title>Root Template</title>
+        <deleted>0</deleted>
+        <root>1</root>
+        <clear>3</clear>
+        <config>
+page = PAGE
+page.10 = TEXT
+page.10.data = page:title
+        </config>
+    </sys_template>
+</dataset>

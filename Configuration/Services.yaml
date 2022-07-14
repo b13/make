@@ -54,6 +54,6 @@ services:
   B13\Make\Command\AcceptanceTestsCommand:
     tags:
       - name: 'console.command'
-        command: 'make:acceptance'
+        command: 'make:testing:acceptance'
         description: 'Create files required to run acceptance tests'
         schedulable: false

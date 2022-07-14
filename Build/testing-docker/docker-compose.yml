@@ -285,7 +285,7 @@ services:
           set -x
         fi
         php -v | grep '^PHP';
-        find . -name \\*.php ! -path "./.Build/\\*" ! -path "./Resources/Private/CodeTemplates/\\*" -print0 | xargs -0 -n1 -P4 php -dxdebug.mode=off -l >/dev/null
+        find . -name \\*.php ! -path "./.Build/\\*" ! -path "./Resources/Private/CodeTemplates\\*" -print0 | xargs -0 -n1 -P4 php -dxdebug.mode=off -l >/dev/null
       "
 
   phpstan:

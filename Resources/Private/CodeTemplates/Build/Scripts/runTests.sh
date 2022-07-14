@@ -323,6 +323,12 @@ case ${TEST_SUITE} in
         SUITE_EXIT_CODE=$?
         docker-compose down
         ;;
+    phpstanGenerateBaseline)
+        setUpDockerComposeDotEnv
+        docker-compose run phpstan_generate_baseline
+        SUITE_EXIT_CODE=$?
+        docker-compose down
+        ;;
     unit)
         setUpDockerComposeDotEnv
         docker-compose run unit

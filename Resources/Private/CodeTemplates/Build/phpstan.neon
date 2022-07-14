@@ -1,0 +1,17 @@
+# To generate a baseline file use 'Build/Scripts/runTests.sh -s phpstanGenerateBaseline'
+# and uncomment the following 2 lines:
+# includes:
+#   - phpstan-baseline.neon
+
+parameters:
+  level: 6
+
+  # Use local cache dir instead of /tmp
+  tmpDir: ../.Build/.cache/phpstan
+
+	# Add folders you want to include for static analysis
+  paths:
+    - ../Classes
+
+  excludePaths:
+    - ../Tests/Acceptance/Support/ApplicationTester.php

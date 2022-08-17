@@ -20,12 +20,12 @@
     "typo3/cms-core": "^10.0 || ^11.0 || ^12.0"
   },
   "require-dev": {
-    "roave/security-advisories": "dev-master",
-    "typo3/testing-framework": "^6.1",
-    "typo3/coding-standards": "^0.4.0",
     "phpstan/phpstan": "^0.12.37",
     "phpunit/phpunit": "^8.4",
-    "typo3/tailor" : "^1.4"
+    "roave/security-advisories": "dev-latest",
+    "typo3/coding-standards": "^0.4.0",
+    "typo3/tailor": "^1.4",
+    "typo3/testing-framework": "^6.1"
   },
   "config": {
     "vendor-dir": ".Build/vendor",

@@ -21,7 +21,8 @@
   },
   "require-dev": {
     "phpstan/phpstan": "^0.12.37",
-    "phpunit/phpunit": "^8.4",
+    "phpunit/phpunit": "^9.1",
+    "phpspec/prophecy-phpunit": "^2.0.1",
     "roave/security-advisories": "dev-latest",
     "typo3/coding-standards": "^0.4.0",
     "typo3/tailor": "^1.4",

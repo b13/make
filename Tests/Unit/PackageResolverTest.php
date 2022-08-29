@@ -14,15 +14,12 @@ namespace B13\Make\Tests\Unit;
 
 use B13\Make\PackageResolver;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Core\Package\Package;
 use TYPO3\CMS\Core\Package\PackageInterface;
 use TYPO3\CMS\Core\Package\PackageManager;
 
 class PackageResolverTest extends TestCase
 {
-    use ProphecyTrait;
-
     /**
      * @test
      */

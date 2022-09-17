@@ -18,6 +18,6 @@ class {{NAME}} extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Do awesome stuff
-        return 0;
+        return Command::SUCCESS;
     }
 }

@@ -4,6 +4,9 @@ This TYPO3 extension allows to easily kickstart new TYPO3 extensions
 and components, such as Middlewares, Commands or Event listeners, by
 using an intuitive CLI approach.
 
+TYPO3 Explained offers an extended tutorial on how to
+[Kickstart a TYPO3 Extension with "Make"](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/Tutorials/Kickstart/Make/Index.html).
+
 ## Installation
 
 Install this extension as "dev" dependency via `composer req b13/make --dev`.

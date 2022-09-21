@@ -5,7 +5,7 @@ and components, such as Middlewares, Commands or Event listeners, by
 using an intuitive CLI approach.
 
 TYPO3 Explained offers an extended tutorial on how to
-[Kickstart a TYPO3 Extension with "Make"](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/Tutorials/Kickstart/Make/Index.html).
+[Kickstart a TYPO3 Extension with Make](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/Tutorials/Kickstart/Make/Index.html).
 
 ## Installation
 
@@ -13,7 +13,7 @@ Install this extension as "dev" dependency via `composer req b13/make --dev`.
 
 You can also download the extension from the
 [TYPO3 Extension Repository](https://extensions.typo3.org/extension/make/)
-and  activate it in the Extension Manager of your TYPO3 installation.
+and activate it in the Extension Manager of your TYPO3 installation.
 
 Note: This extension is compatible with TYPO3 v10, v11 and v12 and should
 only be used in development context. So please make sure it is excluded

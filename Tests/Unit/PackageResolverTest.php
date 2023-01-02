@@ -25,9 +25,7 @@ class PackageResolverTest extends TestCase
      */
     public function packageNotFoundReturnsNullTest(): void
     {
-        $packageManagerProphecy = $this->prophesize(PackageManager::class);
-        $packageResolver = new PackageResolver($packageManagerProphecy->reveal());
-
+        $packageResolver = new PackageResolver($this->createMock(PackageManager::class));
         self::assertNull($packageResolver->resolvePackage('my_extension'));
     }
 
@@ -36,13 +34,11 @@ class PackageResolverTest extends TestCase
      */
     public function packageFoundReturnsPackageInterface(): void
     {
-        $packageManagerProphecy = $this->prophesize(PackageManager::class);
-        $packageProphecy = $this->prophesize(Package::class);
-        $packageManagerProphecy->getPackage('my_extension')->willReturn($packageProphecy->reveal());
-
+        $packageManagerMock = $this->createMock(PackageManager::class);
+        $packageManagerMock->method('getPackage')->with('my_extension')->willReturn($this->createMock(Package::class));
         self::assertInstanceOf(
             PackageInterface::class,
-            (new PackageResolver($packageManagerProphecy->reveal()))->resolvePackage('my_extension')
+            (new PackageResolver($packageManagerMock))->resolvePackage('my_extension')
         );
     }
 }

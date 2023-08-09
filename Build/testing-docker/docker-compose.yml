@@ -141,11 +141,11 @@ services:
         fi
         php -v | grep '^PHP';
         if [ ${TYPO3} -eq 11 ]; then
-          COMPOSER_HOME=${CORE_ROOT}/.Build/.composer require typo3/cms-core:^11.5 --dev -W --no-progress --no-interaction
+          composer require typo3/cms-core:^11.5 --dev -W --no-progress --no-interaction
         elif [ ${TYPO3} -eq 10 ]; then
-          COMPOSER_HOME=${CORE_ROOT}/.Build/.composer require typo3/cms-core:^10.4 --dev -W --no-progress --no-interaction
+          composer require typo3/cms-core:^10.4 --dev -W --no-progress --no-interaction
         else
-          COMPOSER_HOME=${CORE_ROOT}/.Build/.composer require typo3/cms-core:^12.4 typo3/coding-standards:^0.7 --dev -W --no-progress --no-interaction
+          composer require typo3/cms-core:^12.4 typo3/coding-standards:^0.7 --dev -W --no-progress --no-interaction
         fi
       "
 

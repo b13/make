@@ -85,7 +85,7 @@ class ServiceConfigurationTest extends TestCase
         self::assertEquals($expectedBasicConfiguration, $serviceConfiguration->getConfiguration()['services']);
     }
 
-    public function basicConfigurationIsCreatedDataProvider(): array
+    public static function basicConfigurationIsCreatedDataProvider(): array
     {
         return [
             ['vendor/Extension'],

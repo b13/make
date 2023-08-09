@@ -48,7 +48,7 @@
     ],
     "prepare-tests": [
       "if [ ! -e .Build/Web/vendor ]; then cd .Build/Web  && ln -s ../vendor && cd -; fi"
-    ],
+    ]
   },
   "autoload": {
     "psr-4": {

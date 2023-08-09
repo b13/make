@@ -125,7 +125,7 @@ services:
         fi
       "
 
-  composer_update:
+  composer_install:
     image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: "${HOST_UID}"
     volumes:
@@ -140,7 +140,13 @@ services:
           set -x
         fi
         php -v | grep '^PHP';
-        COMPOSER_HOME=${CORE_ROOT}/.Build/.composer composer update --no-progress --no-interaction;
+        if [ ${TYPO3} -eq 11 ]; then
+          COMPOSER_HOME=${CORE_ROOT}/.Build/.composer require typo3/cms-core:^11.5 --dev -W --no-progress --no-interaction
+        elif [ ${TYPO3} -eq 10 ]; then
+          COMPOSER_HOME=${CORE_ROOT}/.Build/.composer require typo3/cms-core:^10.4 --dev -W --no-progress --no-interaction
+        else
+          COMPOSER_HOME=${CORE_ROOT}/.Build/.composer require typo3/cms-core:^12.4 typo3/coding-standards:^0.7 --dev -W --no-progress --no-interaction
+        fi
       "
 
   composer_validate:

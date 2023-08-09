@@ -25,7 +25,7 @@
     "roave/security-advisories": "dev-latest",
     "typo3/coding-standards": "^0.4.0",
     "typo3/tailor": "^1.4",
-    "typo3/testing-framework": "^6.1"
+    "typo3/testing-framework": "^7.0"
   },
   "config": {
     "vendor-dir": ".Build/vendor",

@@ -122,18 +122,18 @@ class Extension implements \JsonSerializable
             'type' => 'typo3-cms-extension',
             'license' => ['GPL-2.0-or-later'],
             'require' => [
-                'typo3/cms-core' => implode(' || ', $this->typo3Versions)
+                'typo3/cms-core' => implode(' || ', $this->typo3Versions),
             ],
             'autoload' => [
                 'psr-4' => [
-                    $this->psr4Prefix => 'Classes/'
-                ]
+                    $this->psr4Prefix => 'Classes/',
+                ],
             ],
             'extra' => [
                 'typo3/cms' => [
-                    'extension-key' => $this->extensionKey
-                ]
-            ]
+                    'extension-key' => $this->extensionKey,
+                ],
+            ],
         ];
     }
 
@@ -150,7 +150,7 @@ class Extension implements \JsonSerializable
             'autoload' => [
                 'psr-4' => [
                     str_replace('\\', '\\\\', $this->psr4Prefix) => 'Classes/',
-                ]
+                ],
             ],
         ];
     }

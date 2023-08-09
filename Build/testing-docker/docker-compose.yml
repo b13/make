@@ -125,7 +125,7 @@ services:
         fi
       "
 
-  composer_update:
+  composer_install:
     image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: "${HOST_UID}"
     volumes:
@@ -140,7 +140,17 @@ services:
           set -x
         fi
         php -v | grep '^PHP';
-        COMPOSER_HOME=${CORE_ROOT}/.Build/.composer composer update --no-progress --no-interaction;
+        if [ ${TYPO3} -eq 11 ]; then
+          composer clear-cache
+          composer require typo3/cms-core:^11.5 --dev -W --no-progress --no-interaction
+        elif [ ${TYPO3} -eq 10 ]; then
+          composer clear-cache
+          composer require typo3/cms-core:^10.4 typo3/testing-framework:^6 --dev -W --no-progress --no-interaction
+          composer prepare-tests-10
+        else
+          composer clear-cache
+          composer require typo3/cms-core:^12.4 --dev -W --no-progress --no-interaction
+        fi
       "
 
   composer_validate:
@@ -323,12 +333,12 @@ services:
         php -v | grep '^PHP';
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" \
-          bin/phpunit -c Web/typo3conf/ext/make/Build/UnitTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
+          bin/phpunit -c ../Build/UnitTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
         else
           DOCKER_HOST=`route -n | awk '/^0.0.0.0/ { print $$2 }'`
           XDEBUG_MODE=\"debug,develop\" \
           XDEBUG_TRIGGER=\"foo\" \
           XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=$${DOCKER_HOST}\" \
-          bin/phpunit -c Web/typo3conf/ext/make/Build/UnitTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
+          bin/phpunit -c ../Build/UnitTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
         fi
       "

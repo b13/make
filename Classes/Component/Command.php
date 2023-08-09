@@ -85,10 +85,10 @@ class Command extends AbstractComponent implements ServiceConfigurationComponent
                         'name' => 'console.command',
                         'command' => $this->commandName,
                         'description' => $this->description,
-                        'schedulable' => $this->schedulable
-                    ]
-                ]
-            ]
+                        'schedulable' => $this->schedulable,
+                    ],
+                ],
+            ],
         ];
     }
 }

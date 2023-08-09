@@ -90,9 +90,9 @@ class BackendController extends AbstractComponent implements ArrayConfigurationC
         return [
             $this->getClassName() => [
                 'tags' => [
-                    'backend.controller'
-                ]
-            ]
+                    'backend.controller',
+                ],
+            ],
         ];
     }
 }

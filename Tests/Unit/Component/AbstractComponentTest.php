@@ -37,7 +37,7 @@ class AbstractComponentTest extends TestCase
         self::assertEquals('Vendor\\Extension\\', $component->getPsr4Prefix());
     }
 
-    public function psr4PrefixIsSanitizedDataProvider(): array
+    public static function psr4PrefixIsSanitizedDataProvider(): array
     {
         return [
             ['vendor/Extension'],
@@ -71,7 +71,7 @@ class AbstractComponentTest extends TestCase
         self::assertEquals('MyClassName', $component->getName());
     }
 
-    public function nameIsSanitizedDataProvider(): array
+    public static function nameIsSanitizedDataProvider(): array
     {
         return [
             ['/MyClassName'],
@@ -129,7 +129,7 @@ class AbstractComponentTest extends TestCase
         self::assertEquals($expectedNamespace, $component->getSanitizedNamespace());
     }
 
-    public function namespaceIsSanitizedDataProvider(): array
+    public static function namespaceIsSanitizedDataProvider(): array
     {
         return [
             ['', 'Vendor\\Extension'],
@@ -167,7 +167,7 @@ class AbstractComponentTest extends TestCase
         self::assertEquals($expectedClassName, $component->getClassName());
     }
 
-    public function classNameIsSanitizedDataProvider(): array
+    public static function classNameIsSanitizedDataProvider(): array
     {
         return [
             ['/MyClassName', '', 'Vendor\\Extension\\MyClassName'],
@@ -211,7 +211,7 @@ class AbstractComponentTest extends TestCase
         self::assertEquals($expectedIdentifier, $component->getSanitizedIdentifierProposal());
     }
 
-    public function getIdentifierProposalTestDataProvider(): array
+    public static function getIdentifierProposalTestDataProvider(): array
     {
         return [
             ['vendor/MyExtension', '/MyClassName', 'vendor/my-extension/my-class-name'],
@@ -252,7 +252,7 @@ class AbstractComponentTest extends TestCase
         self::assertEquals($expectedIdentifier, $component->getSanitizedIdentifierProposal());
     }
 
-    public function getIdentifierProposalWithStaticPrefixTestDataProvider(): array
+    public static function getIdentifierProposalWithStaticPrefixTestDataProvider(): array
     {
         return [
             ['vendor/Extension', '/MyClassName', 'prefix/my-class-name'],

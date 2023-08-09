@@ -10,24 +10,28 @@ jobs:
 
   tests:
     name: All tests
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ '7.2', '7.3' ] # 7.4 is disabled for now since composer automatically installs the highest possible TYPO3 version instead of v10
-        TYPO3: [ '10' ]
+        php: [ '7.4', '8.0', '8.1' ]
+        TYPO3: [ '11' ]
         include:
-          - TYPO3: '11'
-            php: '7.4'
-          - TYPO3: '11'
-            php: '8.0'
-          - TYPO3: '11'
+          - TYPO3: '12'
             php: '8.1'
+          - TYPO3: '12'
+            php: '8.2'
+          - TYPO3: '10'
+            php: '7.4'
+          - TYPO3: '10'
+            php: '7.2'
+          - TYPO3: '10'
+            php: '7.3'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Install testing system
-        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -s composerUpdate
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -t ${{ matrix.TYPO3 }} -s composerInstall
 
       - name: Composer validate
         run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s composerValidate

@@ -51,15 +51,15 @@ Options:
         Specifies which test suite to run
             - acceptance: backend acceptance tests
             - cgl: cgl test and fix all php files
-            - composerUpdate: "composer update", handy if host has no PHP
+            - composerInstall: "composer require"
             - composerValidate: "composer validate"
             - functional: functional tests
             - lint: PHP linting
             - phpstan: phpstan analyze
             - unit (default): PHP unit tests
 
-    -t <10|11>
-        Only with -s composerUpdate|acceptance|functional
+    -t <10|11|12>
+        Only with -s composerInstall|acceptance|functional
         TYPO3 core major version the extension is embedded in for testing.
 
     -d <mariadb|postgres|sqlite>
@@ -69,7 +69,7 @@ Options:
             - postgres: use postgres
             - sqlite: use sqlite
 
-    -p <7.2|7.3|7.4|8.0|8.1>
+    -p <7.2|7.3|7.4|8.0|8.1|8.2>
         Specifies the PHP minor version to be used
             - 7.4 (default): use PHP 7.4
 
@@ -120,16 +120,6 @@ if ! type "docker-compose" > /dev/null; then
   exit 1
 fi
 
-# docker-compose v2 is enabled by docker for mac as experimental feature without
-# asking the user. v2 is currently broken. Detect the version and error out.
-DOCKER_COMPOSE_VERSION=$(docker-compose version --short)
-DOCKER_COMPOSE_MAJOR=$(echo "$DOCKER_COMPOSE_VERSION" | cut -d'.' -f1 | tr -d 'v')
-if [ "$DOCKER_COMPOSE_MAJOR" -gt "1" ]; then
-    echo "docker-compose $DOCKER_COMPOSE_VERSION is currently broken and not supported by runTests.sh."
-    echo "If you are running Docker Desktop for MacOS/Windows disable 'Use Docker Compose V2 release candidate' (Settings > Experimental Features)"
-    exit 1
-fi
-
 # Go to the directory this script is located, so everything else is relative
 # to this dir, no matter from where this script is called.
 THIS_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
@@ -173,7 +163,7 @@ while getopts ":s:d:p:e:t:xy:nhuv" OPT; do
             ;;
         p)
             PHP_VERSION=${OPTARG}
-            if ! [[ ${PHP_VERSION} =~ ^(7.2|7.3|7.4|8.0|8.1)$ ]]; then
+            if ! [[ ${PHP_VERSION} =~ ^(7.2|7.3|7.4|8.0|8.1|8.2)$ ]]; then
                 INVALID_OPTIONS+=("${OPTARG}")
             fi
             ;;
@@ -254,9 +244,9 @@ case ${TEST_SUITE} in
         SUITE_EXIT_CODE=$?
         docker-compose down
         ;;
-    composerUpdate)
+    composerInstall)
         setUpDockerComposeDotEnv
-        docker-compose run composer_update
+        docker-compose run composer_install
         SUITE_EXIT_CODE=$?
         docker-compose down
         ;;

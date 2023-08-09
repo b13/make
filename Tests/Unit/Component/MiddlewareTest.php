@@ -73,7 +73,7 @@ EOF;
         $expected = [
             'target' => 'Vendor\\Extension\\MyMiddleware',
             'before' => ['typo3/cms-frontend/timetracker', 'typo3/cms-core/verify-host-header'],
-            'after' => ['typo3/cms-core/normalized-params-attribute', 'typo3/cms-frontend/eid']
+            'after' => ['typo3/cms-core/normalized-params-attribute', 'typo3/cms-frontend/eid'],
         ];
 
         self::assertEquals($expected, $this->subject->getArrayConfiguration());

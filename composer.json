@@ -42,9 +42,6 @@
   "scripts": {
     "prepare-tests-10": [
       "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
-    ],
-    "prepare-tests": [
-      "if [ ! -e .Build/Web/vendor ]; then cd .Build/Web  && ln -s ../vendor && cd -; fi"
     ]
   },
   "autoload": {

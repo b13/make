@@ -13,9 +13,13 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        php: [ '7.2', '7.3' ] # 7.4 is disabled for now since composer automatically installs the highest possible TYPO3 version instead of v10
-        TYPO3: [ '10' ]
+        php: [ '8.1' ] # 7.4 is disabled for now since composer automatically installs the highest possible TYPO3 version instead of v10
+        TYPO3: [ '12' ]
         include:
+          - TYPO3: '10'
+            php: '7.2'
+          - TYPO3: '10'
+            php: '7.3'
           - TYPO3: '11'
             php: '7.4'
           - TYPO3: '11'

@@ -328,9 +328,9 @@ services:
           set -x
         fi
         if [ ${TYPO3} -eq 12 ]; then
-          CONFIG_PATH="vendor/b13/make/Build/UnitTests.xml"
+          CONFIG_PATH=\"vendor/b13/make/Build/UnitTests.xml\"
         else
-          CONFIG_PATH="Web/typo3conf/ext/make/Build/UnitTests.xml"
+          CONFIG_PATH=\"Web/typo3conf/ext/make/Build/UnitTests.xml\"
         fi
         php -v | grep '^PHP';
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then

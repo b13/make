@@ -342,5 +342,5 @@ services:
           XDEBUG_TRIGGER=\"foo\" \
           XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=$${DOCKER_HOST}\" \
           bin/phpunit -c ${CONFIG_PATH} ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
-      fi
+        fi
       "

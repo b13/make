@@ -327,6 +327,11 @@ services:
         if [ ${SCRIPT_VERBOSE} -eq 1 ]; then
           set -x
         fi
+        if [ ${TYPO3} -eq 12 ]; then
+          CONFIG_PATH="vendor/b13/make/Build/UnitTests.xml"
+        else
+          CONFIG_PATH="Web/typo3conf/ext/make/Build/UnitTests.xml"
+        fi
         php -v | grep '^PHP';
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
           XDEBUG_MODE=\"off\" \
@@ -341,9 +346,9 @@ services:
           XDEBUG_TRIGGER=\"foo\" \
           XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=$${DOCKER_HOST}\" \
           if [ ${TYPO3} -eq 12 ]; then
-            bin/phpunit -c vendor/b13/make/Build/UnitTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
+            bin/phpunit -c ${CONFIG_PATH} ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
           else
-            bin/phpunit -c Web/typo3conf/ext/make/Build/UnitTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
+            bin/phpunit -c ${CONFIG_PATH} ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
           fi
       fi
       "

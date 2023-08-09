@@ -127,13 +127,13 @@ class Extension implements \JsonSerializable
             'autoload' => [
                 'psr-4' => [
                     $this->psr4Prefix => 'Classes/',
-                ]
+                ],
             ],
             'extra' => [
                 'typo3/cms' => [
                     'extension-key' => $this->extensionKey,
-                ]
-            ]
+                ],
+            ],
         ];
     }
 

@@ -142,10 +142,13 @@ services:
         php -v | grep '^PHP';
         if [ ${TYPO3} -eq 11 ]; then
           composer require typo3/cms-core:^11.5 --dev -W --no-progress --no-interaction
+          composer prepare-tests
         elif [ ${TYPO3} -eq 10 ]; then
           composer require typo3/cms-core:^10.4 typo3/testing-framework:^6 phpunit/phpunit ^8.4 --dev -W --no-progress --no-interaction
+          composer prepare-tests-10 && composer prepare-tests
         else
           composer require typo3/cms-core:^12.4 --dev -W --no-progress --no-interaction
+          composer prepare-tests
         fi
       "
 

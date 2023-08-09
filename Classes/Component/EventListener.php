@@ -63,7 +63,7 @@ class EventListener extends AbstractComponent implements ServiceConfigurationCom
                 'NAMESPACE' => $this->getNamespace(),
                 'NAME' => $this->name,
                 'METHOD' => $this->methodName ?: '__invoke',
-                'EVENT' => $this->eventName
+                'EVENT' => $this->eventName,
             ]
         );
     }
@@ -76,10 +76,10 @@ class EventListener extends AbstractComponent implements ServiceConfigurationCom
                     [
                         'name' => 'event.listener',
                         'identifier' => $this->identifier,
-                        'event' => ltrim($this->eventName, '\\')
-                    ]
-                ]
-            ]
+                        'event' => ltrim($this->eventName, '\\'),
+                    ],
+                ],
+            ],
         ];
         if ($this->methodName !== '') {
             $configuration[$this->getClassName()]['tags'][0]['method'] = $this->methodName;

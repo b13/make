@@ -25,8 +25,8 @@ class ServiceConfigurationTest extends TestCase
     private const TEST_CONFIGURATION = [
         'services' => [
             '_defaults' => ['public' => true],
-            'Vendor\\Extension\\' => ['resource' => '../Classes/*', 'exclude' => '../Classes/Domain/Model/*']
-        ]
+            'Vendor\\Extension\\' => ['resource' => '../Classes/*', 'exclude' => '../Classes/Domain/Model/*'],
+        ],
     ];
 
     protected function setUp(): void
@@ -74,12 +74,12 @@ class ServiceConfigurationTest extends TestCase
             '_defaults' => [
                 'autowire' => true,
                 'autoconfigure' => true,
-                'public' => false
+                'public' => false,
             ],
             'Vendor\\Extension\\' => [
                 'resource' => '../Classes/*',
-                'exclude' => '../Classes/Domain/Model/*'
-            ]
+                'exclude' => '../Classes/Domain/Model/*',
+            ],
         ];
 
         self::assertEquals($expectedBasicConfiguration, $serviceConfiguration->getConfiguration()['services']);
@@ -112,7 +112,7 @@ class ServiceConfigurationTest extends TestCase
         self::assertEquals(self::TEST_CONFIGURATION, $configuration);
 
         $configuration['new_key'] = [
-            'name' => 'some name'
+            'name' => 'some name',
         ];
         $serviceConfiguration->setConfiguration($configuration);
         $serviceConfiguration->write();
@@ -132,7 +132,7 @@ class ServiceConfigurationTest extends TestCase
         self::assertEquals(self::TEST_CONFIGURATION, $configuration);
 
         $configuration['imports'] = [
-            ['resource' => 'Some/Other/Configuration.yaml']
+            ['resource' => 'Some/Other/Configuration.yaml'],
         ];
         $serviceConfiguration->setConfiguration($configuration);
 

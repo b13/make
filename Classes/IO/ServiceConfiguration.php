@@ -47,12 +47,12 @@ class ServiceConfiguration extends AbstractConfiguration
             '_defaults' => [
                 'autowire' => true,
                 'autoconfigure' => true,
-                'public' => false
+                'public' => false,
             ],
             trim(str_replace('/', '\\', ucfirst($psr4Prefix)), '\\') . '\\' => [
                 'resource' => '../Classes/*',
-                'exclude' => '../Classes/Domain/Model/*'
-            ]
+                'exclude' => '../Classes/Domain/Model/*',
+            ],
         ];
     }
 

@@ -71,7 +71,7 @@ class ArrayConfigurationTest extends TestCase
         self::assertEmpty($configuration);
 
         $configuration['new_key'] = [
-            'name' => 'some name'
+            'name' => 'some name',
         ];
 
         $arrayConfiguration->setConfiguration($configuration);

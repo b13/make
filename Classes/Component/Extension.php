@@ -160,10 +160,10 @@ class Extension implements \JsonSerializable
         $min = $this->typo3Versions[array_key_first($this->typo3Versions)];
         $max = $this->typo3Versions[array_key_last($this->typo3Versions)];
 
-        // While ^12.0 will also include upcoming sprint releases,
+        // While ^13.0 will also include upcoming sprint releases,
         // we need to set minor version "4" for the max version.
         // @todo Should be handled more efficient
-        if ($max === '^12.0') {
+        if ($max === '^13.0') {
             $max = str_replace('.0', '.4', $max);
         }
 

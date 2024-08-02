@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
 
 #
-# TYPO3 core test runner based on docker and docker-compose.
+# TYPO3 core test runner based on docker and docker compose.
 #
 
 # Function to write a .env file in Build/testing-docker
-# This is read by docker-compose and vars defined here are
+# This is read by docker compose and vars defined here are
 # used in Build/testing-docker/docker-compose.yml
 setUpDockerComposeDotEnv() {
     # Delete possibly existing local .env file if exists
     [ -e .env ] && rm .env
-    # Set up a new .env file for docker-compose
+    # Set up a new .env file for docker compose
     {
         echo "COMPOSE_PROJECT_NAME=local"
         # To prevent access rights of files created by the testing, the docker image later
-        # runs with the same user that is currently executing the script. docker-compose can't
+        # runs with the same user that is currently executing the script. docker compose can't
         # use $UID directly itself since it is a shell variable and not an env variable, so
         # we have to set it explicitly here.
         echo "HOST_UID=`id -u`"
@@ -40,7 +40,7 @@ read -r -d '' HELP <<EOF
 make test runner. Execute unit test suite and some other details.
 Also used by github actions for test execution.
 
-Successfully tested with docker version 18.06.1-ce and docker-compose 1.21.2.
+Successfully tested with docker version 18.06.1-ce and docker compose 1.21.2.
 
 Usage: $0 [options] [file]
 
@@ -58,7 +58,7 @@ Options:
             - phpstan: phpstan analyze
             - unit (default): PHP unit tests
 
-    -t <10|11|12>
+    -t <10|11|12|13>
         Only with -s composerInstall|acceptance|functional
         TYPO3 core major version the extension is embedded in for testing.
 
@@ -69,7 +69,7 @@ Options:
             - postgres: use postgres
             - sqlite: use sqlite
 
-    -p <7.2|7.3|7.4|8.0|8.1|8.2>
+    -p <7.2|7.3|7.4|8.0|8.1|8.2|8.3>
         Specifies the PHP minor version to be used
             - 7.4 (default): use PHP 7.4
 
@@ -114,9 +114,9 @@ Examples:
     ./Build/Scripts/runTests.sh -p 7.3
 EOF
 
-# Test if docker-compose exists, else exit out with error
-if ! type "docker-compose" > /dev/null; then
-  echo "This script relies on docker and docker-compose. Please install" >&2
+# Test if docker compose exists, else exit out with error
+if ! type "docker" > /dev/null; then
+  echo "This script relies on docker and docker compose. Please install" >&2
   exit 1
 fi
 
@@ -163,7 +163,7 @@ while getopts ":s:d:p:e:t:xy:nhuv" OPT; do
             ;;
         p)
             PHP_VERSION=${OPTARG}
-            if ! [[ ${PHP_VERSION} =~ ^(7.2|7.3|7.4|8.0|8.1|8.2)$ ]]; then
+            if ! [[ ${PHP_VERSION} =~ ^(7.2|7.3|7.4|8.0|8.1|8.2|8.3)$ ]]; then
                 INVALID_OPTIONS+=("${OPTARG}")
             fi
             ;;
@@ -230,9 +230,9 @@ fi
 case ${TEST_SUITE} in
     acceptance)
         setUpDockerComposeDotEnv
-        docker-compose run acceptance_backend_mariadb10
+        docker compose run --rm acceptance_backend_mariadb10
         SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker compose down
         ;;
     cgl)
         # Active dry-run for cgl needs not "-n" but specific options
@@ -240,36 +240,36 @@ case ${TEST_SUITE} in
             CGLCHECK_DRY_RUN="--dry-run --diff"
         fi
         setUpDockerComposeDotEnv
-        docker-compose run cgl
+        docker compose run --rm cgl
         SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker compose down
         ;;
     composerInstall)
         setUpDockerComposeDotEnv
-        docker-compose run composer_install
+        docker compose run --rm composer_install
         SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker compose down
         ;;
     composerValidate)
         setUpDockerComposeDotEnv
-        docker-compose run composer_validate
+        docker compose run --rm composer_validate
         SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker compose down
         ;;
     functional)
         setUpDockerComposeDotEnv
         case ${DBMS} in
             mariadb)
-                docker-compose run functional_mariadb10
+                docker compose run --rm functional_mariadb10
                 SUITE_EXIT_CODE=$?
                 ;;
             postgres)
-                docker-compose run functional_postgres10
+                docker compose run --rm functional_postgres10
                 SUITE_EXIT_CODE=$?
                 ;;
             sqlite)
                 mkdir -p ${CORE_ROOT}/.Build/Web/typo3temp/var/tests/functional-sqlite-dbs/
-                docker-compose run functional_sqlite
+                docker compose run --rm functional_sqlite
                 SUITE_EXIT_CODE=$?
                 ;;
             *)
@@ -278,25 +278,25 @@ case ${TEST_SUITE} in
                 echo "${HELP}" >&2
                 exit 1
         esac
-        docker-compose down
+        docker compose down
         ;;
     lint)
         setUpDockerComposeDotEnv
-        docker-compose run lint
+        docker compose run --rm lint
         SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker compose down
         ;;
     phpstan)
         setUpDockerComposeDotEnv
-        docker-compose run phpstan
+        docker compose run --rm phpstan
         SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker compose down
         ;;
     unit)
         setUpDockerComposeDotEnv
-        docker-compose run unit
+        docker compose run --rm unit
         SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker compose down
         ;;
     update)
         # pull typo3/core-testing-*:latest versions of those ones that exist locally

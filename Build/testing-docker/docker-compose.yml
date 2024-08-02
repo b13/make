@@ -1,4 +1,3 @@
-version: '2.3'
 services:
   chrome:
     image: selenium/standalone-chrome:3.141.59-20210713
@@ -35,13 +34,13 @@ services:
     command: >
       /bin/sh -c "
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
-          XDEBUG_MODE=\"off\" \
+          XDEBUG_MODE=\"off\" \\
           php -S web:8000 -t ${CORE_ROOT}/.Build/Web
         else
           DOCKER_HOST=`route -n | awk '/^0.0.0.0/ { print $$2 }'`
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=$${DOCKER_HOST}\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=$${DOCKER_HOST}\" \\
           php -S web:8000 -t ${CORE_ROOT}/.Build/Web
         fi
       "
@@ -78,13 +77,13 @@ services:
         mkdir -p Web/typo3temp/var/tests/
         COMMAND=\"vendor/codeception/codeception/codecept run Backend -d -c Web/typo3conf/ext/make/Tests/codeception.yml ${TEST_FILE}\"
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
-          XDEBUG_MODE=\"off\" \
+          XDEBUG_MODE=\"off\" \\
           $${COMMAND};
         else
           DOCKER_HOST=`route -n | awk '/^0.0.0.0/ { print $$2 }'`
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=$${DOCKER_HOST}\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=$${DOCKER_HOST}\" \\
           $${COMMAND};
         fi
       "
@@ -105,22 +104,22 @@ services:
         fi
         php -v | grep '^PHP';
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
-          php -dxdebug.mode=off \
-            .Build/bin/php-cs-fixer fix \
-              -v \
-              ${CGLCHECK_DRY_RUN} \
-              --config=Build/php-cs-fixer.php \
+          php -dxdebug.mode=off \\
+            .Build/bin/php-cs-fixer fix \\
+              -v \\
+              ${CGLCHECK_DRY_RUN} \\
+              --config=Build/php-cs-fixer.php \\
               --using-cache=no .
         else
           DOCKER_HOST=`route -n | awk '/^0.0.0.0/ { print $$2 }'`
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=$${DOCKER_HOST}\" \
-          PHP_CS_FIXER_ALLOW_XDEBUG=1 \
-          .Build/bin/php-cs-fixer fix \
-            -v \
-            ${CGLCHECK_DRY_RUN} \
-            --config=Build/php-cs-fixer.php \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=$${DOCKER_HOST}\" \\
+          PHP_CS_FIXER_ALLOW_XDEBUG=1 \\
+          .Build/bin/php-cs-fixer fix \\
+            -v \\
+            ${CGLCHECK_DRY_RUN} \\
+            --config=Build/php-cs-fixer.php \\
             --using-cache=no .
         fi
       "
@@ -199,13 +198,13 @@ services:
         echo Database is up;
         php -v | grep '^PHP';
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
-          XDEBUG_MODE=\"off\" \
+          XDEBUG_MODE=\"off\" \\
           bin/phpunit -c Web/typo3conf/ext/make/Build/FunctionalTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
         else
           DOCKER_HOST=`route -n | awk '/^0.0.0.0/ { print $$2 }'`
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=$${DOCKER_HOST}\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=$${DOCKER_HOST}\" \\
           bin/phpunit -c Web/typo3conf/ext/make/Build/FunctionalTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
         fi
       "
@@ -239,13 +238,13 @@ services:
         echo Database is up;
         php -v | grep '^PHP';
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
-          XDEBUG_MODE=\"off\" \
+          XDEBUG_MODE=\"off\" \\
           bin/phpunit -c Web/typo3conf/ext/make/Build/FunctionalTests.xml ${EXTRA_TEST_OPTIONS} --exclude-group not-postgres ${TEST_FILE};
         else
           DOCKER_HOST=`route -n | awk '/^0.0.0.0/ { print $$2 }'`
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=$${DOCKER_HOST}\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=$${DOCKER_HOST}\" \\
           bin/phpunit -c Web/typo3conf/ext/make/Build/FunctionalTests.xml ${EXTRA_TEST_OPTIONS} --exclude-group not-postgres ${TEST_FILE};
         fi
       "
@@ -270,13 +269,13 @@ services:
         fi
         php -v | grep '^PHP';
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
-          XDEBUG_MODE=\"off\" \
+          XDEBUG_MODE=\"off\" \\
           bin/phpunit -c Web/typo3conf/ext/make/Build/FunctionalTests.xml ${EXTRA_TEST_OPTIONS} --exclude-group not-sqlite ${TEST_FILE};
         else
           DOCKER_HOST=`route -n | awk '/^0.0.0.0/ { print $$2 }'`
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=$${DOCKER_HOST}\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=$${DOCKER_HOST}\" \\
           bin/phpunit -c Web/typo3conf/ext/make/Build/FunctionalTests.xml ${EXTRA_TEST_OPTIONS} --exclude-group not-sqlite ${TEST_FILE};
         fi
       "
@@ -332,13 +331,13 @@ services:
         fi
         php -v | grep '^PHP';
         if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
-          XDEBUG_MODE=\"off\" \
+          XDEBUG_MODE=\"off\" \\
           bin/phpunit -c ../Build/UnitTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
         else
           DOCKER_HOST=`route -n | awk '/^0.0.0.0/ { print $$2 }'`
-          XDEBUG_MODE=\"debug,develop\" \
-          XDEBUG_TRIGGER=\"foo\" \
-          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=$${DOCKER_HOST}\" \
+          XDEBUG_MODE=\"debug,develop\" \\
+          XDEBUG_TRIGGER=\"foo\" \\
+          XDEBUG_CONFIG=\"client_port=${PHP_XDEBUG_PORT} client_host=$${DOCKER_HOST}\" \\
           bin/phpunit -c ../Build/UnitTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
         fi
       "

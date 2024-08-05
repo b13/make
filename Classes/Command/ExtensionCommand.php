@@ -52,12 +52,13 @@ class ExtensionCommand extends AbstractCommand
         $availableTypo3Versions = [
             '^10.4' => 'TYPO3 v10 LTS',
             '^11.5' => 'TYPO3 v11 LTS',
-            '^12.0' => 'TYPO3 v12 LTS',
+            '^12.4' => 'TYPO3 v12 LTS',
+            '^13.0' => 'TYPO3 v13',
         ];
         $question = $this->io->askQuestion((new ChoiceQuestion(
             'Choose supported TYPO3 versions (comma separate for multiple)',
-            array_combine([10, 11, 12], array_values($availableTypo3Versions)),
-            11
+            array_combine([10, 11, 12, 13], array_values($availableTypo3Versions)),
+            12
         ))->setMultiselect(true));
 
         $supportedTypo3Versions = [];

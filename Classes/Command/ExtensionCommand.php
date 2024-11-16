@@ -53,7 +53,7 @@ class ExtensionCommand extends AbstractCommand
             '^10.4' => 'TYPO3 v10 LTS',
             '^11.5' => 'TYPO3 v11 LTS',
             '^12.4' => 'TYPO3 v12 LTS',
-            '^13.0' => 'TYPO3 v13',
+            '^13.4' => 'TYPO3 v13 LTS',
         ];
         $question = $this->io->askQuestion((new ChoiceQuestion(
             'Choose supported TYPO3 versions (comma separate for multiple)',

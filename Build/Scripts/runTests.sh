@@ -58,7 +58,7 @@ Options:
             - phpstan: phpstan analyze
             - unit (default): PHP unit tests
 
-    -t <10|11|12|13>
+    -t <10|11|12|13|14>
         Only with -s composerInstall|acceptance|functional
         TYPO3 core major version the extension is embedded in for testing.
 
@@ -69,7 +69,7 @@ Options:
             - postgres: use postgres
             - sqlite: use sqlite
 
-    -p <7.2|7.3|7.4|8.0|8.1|8.2|8.3>
+    -p <7.2|7.3|7.4|8.0|8.1|8.2|8.3|8.4|8.5>
         Specifies the PHP minor version to be used
             - 7.4 (default): use PHP 7.4
 
@@ -163,7 +163,7 @@ while getopts ":s:d:p:e:t:xy:nhuv" OPT; do
             ;;
         p)
             PHP_VERSION=${OPTARG}
-            if ! [[ ${PHP_VERSION} =~ ^(7.2|7.3|7.4|8.0|8.1|8.2|8.3)$ ]]; then
+            if ! [[ ${PHP_VERSION} =~ ^(7.2|7.3|7.4|8.0|8.1|8.2|8.3|8.4|8.5)$ ]]; then
                 INVALID_OPTIONS+=("${OPTARG}")
             fi
             ;;
@@ -299,10 +299,10 @@ case ${TEST_SUITE} in
         docker compose down
         ;;
     update)
-        # pull typo3/core-testing-*:latest versions of those ones that exist locally
-        docker images typo3/core-testing-*:latest --format "{{.Repository}}:latest" | xargs -I {} docker pull {}
+        # pull ghcr.io/typo3/core-testing-*:latest versions of those ones that exist locally
+        docker images ghcr.io/typo3/core-testing-*:latest --format "{{.Repository}}:latest" | xargs -I {} docker pull {}
         # remove "dangling" typo3/core-testing-* images (those tagged as <none>)
-        docker images typo3/core-testing-* --filter "dangling=true" --format "{{.ID}}" | xargs -I {} docker rmi {}
+        docker images ghcr.io/typo3/core-testing-* --filter "dangling=true" --format "{{.ID}}" | xargs -I {} docker rmi {}
         ;;
     *)
         echo "Invalid -s option argument ${TEST_SUITE}" >&2

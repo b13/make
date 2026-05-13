@@ -160,7 +160,9 @@ class ExtensionCommand extends AbstractCommand
     {
         return (int)preg_replace_callback(
             '/^\^([0-9]{1,2}).*$/',
-            static function ($matches) { return $matches[1]; },
+            static function ($matches) {
+                return $matches[1];
+            },
             $versionConstraint
         );
     }

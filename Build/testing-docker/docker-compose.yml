@@ -21,7 +21,7 @@ services:
       - /var/lib/postgresql/data:rw,noexec,nosuid
 
   web:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    image: ghcr.io/typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: "${HOST_UID}"
     stop_grace_period: 1s
     volumes:
@@ -46,7 +46,7 @@ services:
       "
 
   acceptance_backend_mariadb10:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    image: ghcr.io/typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: "${HOST_UID}"
     links:
       - mariadb10
@@ -89,7 +89,7 @@ services:
       "
 
   cgl:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    image: ghcr.io/typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: "${HOST_UID}"
     volumes:
       - ${CORE_ROOT}:${CORE_ROOT}
@@ -125,7 +125,7 @@ services:
       "
 
   composer_install:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    image: ghcr.io/typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: "${HOST_UID}"
     volumes:
       - ${CORE_ROOT}:${CORE_ROOT}
@@ -139,7 +139,13 @@ services:
           set -x
         fi
         php -v | grep '^PHP';
-        if [ ${TYPO3} -eq 11 ]; then
+        if [ ${TYPO3} -eq 13 ]; then
+          composer clear-cache
+          composer require typo3/cms-core:^13.4 typo3/testing-framework:^8 --dev -W --no-progress --no-interaction
+        elif [ ${TYPO3} -eq 12 ]; then
+          composer clear-cache
+          composer require typo3/cms-core:^12.4 --dev -W --no-progress --no-interaction
+        elif [ ${TYPO3} -eq 11 ]; then
           composer clear-cache
           composer require typo3/cms-core:^11.5 --dev -W --no-progress --no-interaction
         elif [ ${TYPO3} -eq 10 ]; then
@@ -148,12 +154,12 @@ services:
           composer prepare-tests-10
         else
           composer clear-cache
-          composer require typo3/cms-core:^12.4 --dev -W --no-progress --no-interaction
+          composer require typo3/cms-core:^14.2 typo3/testing-framework:^9 --dev -W --no-progress --no-interaction
         fi
       "
 
   composer_validate:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    image: ghcr.io/typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: "${HOST_UID}"
     volumes:
       - ${CORE_ROOT}:${CORE_ROOT}
@@ -171,7 +177,7 @@ services:
       "
 
   functional_mariadb10:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    image: ghcr.io/typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: "${HOST_UID}"
     links:
       - mariadb10
@@ -210,7 +216,7 @@ services:
       "
 
   functional_postgres10:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    image: ghcr.io/typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: "${HOST_UID}"
     links:
       - postgres10
@@ -250,7 +256,7 @@ services:
       "
 
   functional_sqlite:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    image: ghcr.io/typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: "${HOST_UID}"
     volumes:
       - ${CORE_ROOT}:${CORE_ROOT}
@@ -281,7 +287,7 @@ services:
       "
 
   lint:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    image: ghcr.io/typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: "${HOST_UID}"
     volumes:
       - ${CORE_ROOT}:${CORE_ROOT}
@@ -298,7 +304,7 @@ services:
       "
 
   phpstan:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    image: ghcr.io/typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: "${HOST_UID}"
     volumes:
       - ${CORE_ROOT}:${CORE_ROOT}
@@ -316,7 +322,7 @@ services:
       "
 
   unit:
-    image: typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
+    image: ghcr.io/typo3/core-testing-${DOCKER_PHP_IMAGE}:latest
     user: "${HOST_UID}"
     volumes:
       - ${CORE_ROOT}:${CORE_ROOT}

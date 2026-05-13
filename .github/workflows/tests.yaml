@@ -32,18 +32,33 @@ jobs:
             php: '8.2'
           - TYPO3: '11'
             php: '8.3'
-          # TYPO3 12: PHP 8.1 - 8.3
+          # TYPO3 12: PHP 8.1 - 8.4
           - TYPO3: '12'
             php: '8.1'
           - TYPO3: '12'
             php: '8.2'
           - TYPO3: '12'
             php: '8.3'
-          # TYPO3 13: PHP 8.2 - 8.3
+          - TYPO3: '12'
+            php: '8.4'
+          # TYPO3 13: PHP 8.2 - 8.5
           - TYPO3: '13'
             php: '8.2'
           - TYPO3: '13'
             php: '8.3'
+          - TYPO3: '13'
+            php: '8.4'
+          - TYPO3: '13'
+            php: '8.5'
+          # TYPO3 14: PHP 8.2 - 8.5
+          - TYPO3: '14'
+            php: '8.2'
+          - TYPO3: '14'
+            php: '8.3'
+          - TYPO3: '14'
+            php: '8.4'
+          - TYPO3: '14'
+            php: '8.5'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3

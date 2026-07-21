@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+    <!-- Creates a page + subpage -->
+    <pages>
+        <uid>1</uid>
+        <pid>0</pid>
+        <title>Home</title>
+        <slug></slug>
+        <doktype>1</doktype>
+        <deleted>0</deleted>
+        <is_siteroot>1</is_siteroot>
+        <perms_everybody>15</perms_everybody>
+    </pages>
+    <pages>
+        <uid>2</uid>
+        <pid>1</pid>
+        <sorting>128</sorting>
+        <title>Subpage</title>
+        <slug>subpage</slug>
+        <deleted>0</deleted>
+        <doktype>1</doktype>
+        <perms_everybody>15</perms_everybody>
+    </pages>
+</dataset>

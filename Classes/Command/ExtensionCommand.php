@@ -59,7 +59,7 @@ class ExtensionCommand extends AbstractCommand
         $question = $this->io->askQuestion((new ChoiceQuestion(
             'Choose supported TYPO3 versions (comma separate for multiple)',
             array_combine([10, 11, 12, 13, 14], array_values($availableTypo3Versions)),
-            12
+            14
         ))->setMultiselect(true));
 
         $supportedTypo3Versions = [];
